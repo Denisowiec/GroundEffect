@@ -3,49 +3,180 @@
   <head>
     <title>GroundEffect</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script>
+        // globals
+        var index = 0;
+
+        function shuffle(array) {
+            // Fisher-Yatess shuffle algorith, taken from w3schools JS tutorial
+            for (let i = array.length -1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i+1));
+                let k = array[i];
+                array[i] = array[j];
+                array[j] = k;
+            }
+        }
+        function makeRow(color, cornerSpeed, straightSpeed) {
+            const row = { color: color, cornerSpeed: cornerSpeed, straightSpeed: straightSpeed }
+            return row;
+        }
+        function makeDeck() {
+            const cards = [];
+            row = [];
+            row.push(makeRow("black", 2, 17));
+            row.push(makeRow("blue", 1, 14));
+            row.push(makeRow("green", 0, 10));
+            row.push(makeRow("grey", 1, 13));
+            row.push(makeRow("red", 0, 11));
+            row.push(makeRow("yellow", 2, 15));
+            cards[0] = row;
+            row = [];
+            row.push(makeRow("black", 0, 11));
+            row.push(makeRow("blue", 3, 19));
+            row.push(makeRow("green", 1, 14));
+            row.push(makeRow("grey", 0, 10));
+            row.push(makeRow("red", 1, 12));
+            row.push(makeRow("yellow", 2, 16));
+            cards[1] = row;
+            row = [];
+            row.push(makeRow("black", 3, 18));
+            row.push(makeRow("blue", 2, 16));
+            row.push(makeRow("green", 1, 12));
+            row.push(makeRow("grey", 3, 19));
+            row.push(makeRow("red", 2, 17));
+            row.push(makeRow("yellow", 1, 13));
+            cards[2] = row;
+            row = [];
+            row.push(makeRow("black", 3, 19));
+            row.push(makeRow("blue", 0, 10));
+            row.push(makeRow("green", 1, 13));
+            row.push(makeRow("grey", 3, 18));
+            row.push(makeRow("red", 1, 14));
+            row.push(makeRow("yellow", 1, 12));
+            cards[3] = row;
+            row = [];
+            row.push(makeRow("black", 2, 16));
+            row.push(makeRow("blue", 3, 18));
+            row.push(makeRow("green", 2, 15));
+            row.push(makeRow("grey", 1, 14));
+            row.push(makeRow("red", 1, 13));
+            row.push(makeRow("yellow", 0, 11));
+            cards[4] = row;
+            row = [];
+            row.push(makeRow("black", 2, 15));
+            row.push(makeRow("blue", 1, 13));
+            row.push(makeRow("green", 3, 19));
+            row.push(makeRow("grey", 0, 11));
+            row.push(makeRow("red", 3, 18));
+            row.push(makeRow("yellow", 1, 14));
+            cards[5] = row;
+            row = [];
+            row.push(makeRow("black", 1, 12));
+            row.push(makeRow("blue", 0, 11));
+            row.push(makeRow("green", 2, 17));
+            row.push(makeRow("grey", 2, 15));
+            row.push(makeRow("red", 3, 19));
+            row.push(makeRow("yellow", 0, 10));
+            cards[6] = row;
+            row = [];
+            row.push(makeRow("black", 1, 14));
+            row.push(makeRow("blue", 1, 12));
+            row.push(makeRow("green", 3, 18));
+            row.push(makeRow("grey", 2, 16));
+            row.push(makeRow("red", 2, 15));
+            row.push(makeRow("yellow", 2, 17));
+            cards[7] = row;
+            row = [];
+            row.push(makeRow("black", 0, 10));
+            row.push(makeRow("blue", 2, 15));
+            row.push(makeRow("green", 0, 11));
+            row.push(makeRow("grey", 2, 17));
+            row.push(makeRow("red", 2, 16));
+            row.push(makeRow("yellow", 3, 18));
+            cards[8] = row;
+            row = [];
+            row.push(makeRow("black", 1, 13));
+            row.push(makeRow("blue", 2, 17));
+            row.push(makeRow("green", 2, 16));
+            row.push(makeRow("grey", 1, 12));
+            row.push(makeRow("red", 0, 10));
+            row.push(makeRow("yellow", 3, 19));
+            cards[9] = row;
+            return cards;
+        }
+        function displayCard(card) {
+            let cardTable = document.createElement("table");
+            cardTable.setAttribute("class", "card_table");
+            let headerRow = document.createElement("tr");
+            headerRow.setAttribute("class", "card_table_row");
+            let headerCell = document.createElement("th");
+            headerCell.innerText = "Colour";
+            headerRow.appendChild(headerCell);
+            headerCell = document.createElement("th");
+            headerCell.innerText = "Corner";
+            headerRow.appendChild(headerCell);
+            headerCell = document.createElement("th");
+            headerCell.innerText = "Straight";
+            headerRow.appendChild(headerCell);
+            cardTable.appendChild(headerRow);
+
+            for (let cardRow of card) {
+                let row = document.createElement("tr");
+                row.setAttribute("class", "card_table_row");
+                
+                let cell = document.createElement("td");
+                cell.setAttribute("class", "card_table_cell");
+                let img = document.createElement("img");
+                img.setAttribute("src", "assets/cars/" + cardRow.color + "_car.png");
+                img.setAttribute("alt", card.color);
+                cell.appendChild(img);
+                row.appendChild(cell);
+
+                cell = document.createElement("td");
+                cell.setAttribute("class", "card_table_cell");
+                img = document.createElement("img");
+                img.setAttribute("src", "assets/signs/sign_" + cardRow.cornerSpeed + ".png");
+                img.setAttribute("alt", "corner speed: " + cardRow.cornerSpeed);
+                cell.appendChild(img);
+                row.appendChild(cell);
+                
+                cell = document.createElement("td");
+                cell.setAttribute("class", "card_table_cell");
+                let h = document.createElement("h6");
+                h.innerText = cardRow.straightSpeed;
+                cell.appendChild(h);
+                row.appendChild(cell);
+
+                cardTable.appendChild(row);
+            }
+            document.getElementById("card").innerHTML = "";
+            document.getElementById("card").appendChild(cardTable);
+            document.getElementById("card_counter").innerText = (index + 1) + "/10";
+
+        }
+
+        deck = makeDeck();
+        shuffle(deck);
+        index = 0;
+
+        function nextCard() {
+            index++;
+            if (index >= 10) {
+                index = 0;
+                shuffle(deck);
+            }
+            displayCard(deck[index]);
+        }
+    </script>
   </head>
   <body>
     <h1>GroundEffect</h1>
     <h3>Legend deck replacement</h3>
     <div id="card">
-        <table class="card_table">
-            <tr class="card_table_row">
-                <th>Colour</th>
-                <th>Corner</th>
-                <th>Straight</th>
-            </tr>
-            <tr class="card_table_row">
-                <td class="card_table_cell"><img src="assets/cars/green_car.png" alt="Green car"></td>
-                <td class="card_table_cell"><img src="assets/signs/sign_0.png" alt="0"></td>
-                <td class="card_table_cell"><h6>10</h6></td>
-            </tr>
-            <tr class="card_table_row">
-                <td class="card_table_cell"><img src="assets/cars/red_car.png" alt="Red car"></td>
-                <td class="card_table_cell"><img src="assets/signs/sign_0.png" alt="0"></td>
-                <td class="card_table_cell"><h6>11</h6></td>
-            </tr>
-            <tr class="card_table_row">
-                <td class="card_table_cell"><img src="assets/cars/grey_car.png" alt="Grey car"></td>
-                <td class="card_table_cell"><img src="assets/signs/sign_1.png" alt="1"></td>
-                <td class="card_table_cell"><h6>13</h6></td>
-            </tr>
-            <tr class="card_table_row">
-                <td class="card_table_cell"><img src="assets/cars/blue_car.png" alt="Blue car"></td>
-                <td class="card_table_cell"><img src="assets/signs/sign_1.png" alt="1"></td>
-                <td class="card_table_cell"><h6>14</h6></td>
-            </tr>
-            <tr class="card_table_row">
-                <td class="card_table_cell"><img src="assets/cars/yellow_car.png" alt="Yellow car"></td>
-                <td class="card_table_cell"><img src="assets/signs/sign_2.png" alt="2"></td>
-                <td class="card_table_cell"><h6>15</h6></td>
-            </tr>
-            <tr class="card_table_row">
-                <td class="card_table_cell"><img src="assets/cars/black_car.png" alt="Black car"></td>
-                <td class="card_table_cell"><img src="assets/signs/sign_2.png" alt="2"></td>
-                <td class="card_table_cell"><h6>17</h6></td>
-            </tr>
-        </table>
+        <script>
+            displayCard(deck[index])
+        </script>
     </div>
-    <div class="card_footer"><span id="card_counter">1/10</span><span id="button_next">Next card...</span></div>
+    <div class="card_footer"><span id="card_counter">1/10</span><span onclick="nextCard()" id="button_next">Next card...</span></div>
   </body>
 </html>
