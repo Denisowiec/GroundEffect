@@ -1,7 +1,16 @@
 <script setup>
 import { ref } from 'vue'
 
-const colors = ["black", "blue", "green", "grey", "orange", "purple", "red", "yellow", "purple"]
+const modes = Object.freeze({
+    SETUP: 0,
+    CARDDISPLAY: 1,
+    SETUPSCREEN: 2
+})
+
+const colors = new Set(["black", "blue", "green", "grey", "orange", "purple", "red", "yellow"])
+
+let mode = modes.SETUPSCREEN
+
 
 
 </script>
@@ -9,7 +18,8 @@ const colors = ["black", "blue", "green", "grey", "orange", "purple", "red", "ye
 <template>
   <h1>GroundEffect</h1>
   <h3>Legends deck replacement</h3>
-  <carddisplay :colors="colors"/>
+  <carddisplay v-if="mode == modes.CARDDISPLAY" :colors="colors"/>
+  <setupscreen v-else-if="mode == modes.SETUPSCREEN" :colors="colors" />
 </template>
 
 <style>

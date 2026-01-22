@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 
 const props = defineProps({
-    colors: Array
+    colors: Set
 })
 import { shuffle, generateDeck } from '/src/logic.js'
 
