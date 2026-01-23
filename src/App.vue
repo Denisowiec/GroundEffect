@@ -7,11 +7,15 @@ const modes = Object.freeze({
     SETUPSCREEN: 2
 })
 
-const colors = new Set(["black", "blue", "green", "grey", "orange", "purple", "red", "yellow"])
+let colors = new Set(["black", "blue", "green", "grey", "orange", "purple", "red", "yellow"])
 
-let mode = modes.SETUPSCREEN
+const mode = ref(modes.SETUPSCREEN)
 
-
+function newGame(ifStandardDeck, ifRegenOnShuffle, selectedColors) {
+    console.log("submit clicked")
+    colors = selectedColors
+    mode.value = modes.CARDDISPLAY
+}
 
 </script>
 
@@ -19,7 +23,7 @@ let mode = modes.SETUPSCREEN
   <h1>GroundEffect</h1>
   <h3>Legends deck replacement</h3>
   <carddisplay v-if="mode == modes.CARDDISPLAY" :colors="colors"/>
-  <setupscreen v-else-if="mode == modes.SETUPSCREEN" :colors="colors" />
+  <setupscreen v-else-if="mode == modes.SETUPSCREEN" :colors="colors" @submit="newGame" />
 </template>
 
 <style>

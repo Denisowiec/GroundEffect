@@ -13,13 +13,22 @@ const ifRegenOnShuffle = ref(false)
 const selectedColors = new Object()
 for (const col of AllColors) {
     selectedColors[col] = false
-}
-for (const col of props.colors) {
     if (AllColors.has(col)) {
         selectedColors[col] = true
     }
 }
 
+const emit = defineEmits(['submit'])
+
+function submitSetup() {
+    const colors = new Set()
+    for (const col of AllColors) {
+        if (selectedColors[col]) {
+            colors.add(col)
+        }
+    }
+    emit('submit', ifStandardDeck, ifRegenOnShuffle, colors)
+}
 
 </script>
 <template>
@@ -46,6 +55,7 @@ for (const col of props.colors) {
                 </ul>
             </span>
         </form>
+        <button id="button_accept" @click="submitSetup">Accept</button>
     </div>
 
 </template>
