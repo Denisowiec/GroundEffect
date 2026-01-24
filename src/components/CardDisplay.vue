@@ -4,14 +4,16 @@ import { ref } from 'vue'
 const props = defineProps({
     colors: Set,
     handicap: 0,
+    useStandardDeck: false,
     regenOnShuffle: false
 })
 import { shuffle, generateDeck } from '/src/logic.js'
 
-const deck = generateDeck(props.colors)
+let deck = generateDeck(props.colors)
 const currentCard = ref(0)
 
 function nextCard() {
+    console.log(props.regenOnShuffle)
     currentCard.value++
     if (currentCard.value >= 10) {
         currentCard.value = 0

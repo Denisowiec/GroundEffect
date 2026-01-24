@@ -24,28 +24,32 @@ export function generateDeck(colors) {
         [3, 19]
     ]
 
-    const numberOfColors = colors.size
-    const deck = []
+    const options = possibleCards.slice()
+    shuffle(options)
+    const doubled = options.concat(options)
 
-    // This prepares a shuffled set of 10 options that don't repeat, for every color
-    const numbersByColor = new Map()
-    for (const col of colors) {
-        numbersByColor.set(col, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-    }
-    for (const c of numbersByColor.values()) {
-        shuffle(c)
-    }
-
-    // We now create cards for the deck, by selecting possible cards one by one for each color
+    const matrix = []
     for (let i = 0; i < 10; i++) {
+        matrix[i] = doubled.slice(i, i+10)
+    }
+
+    shuffle(matrix)
+
+    const deck = []
+    
+    for (let option of matrix) {
         let card = []
-        for (const col of colors) {
-            let speedValues = possibleCards[numbersByColor.get(col)[i]]
-            card.push({ color: col, cornerSpeed: speedValues[0], straightSpeed: speedValues[1]})
+        let offset = 0
+        for (let col of colors) {
+            let row = new Object
+            row.color = col
+            row.cornerSpeed = option[offset][0]
+            row.straightSpeed = option[offset][1]
+            card.push(row)
+            offset++
         }
         deck.push(card)
     }
-    // TODO: For the time being, the algorith allows for the same values for two different
-    // colors on the same cards. This shouldn't happen, assuming there are fewer than 10 colors.
+
     return deck
 }

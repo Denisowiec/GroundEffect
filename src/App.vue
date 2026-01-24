@@ -9,12 +9,16 @@ const modes = Object.freeze({
 
 let colors = new Set(["black", "blue", "green", "grey", "orange", "purple", "red", "yellow"])
 let handicap = 0
+let regenOnShuffle = false
+let useStandardDeck = false
 
 const mode = ref(modes.SETUPSCREEN)
 
 function newGame(ifStandardDeck, ifRegenOnShuffle, selectedColors) {
     colors = selectedColors
     handicap = 0
+    regenOnShuffle = ifRegenOnShuffle
+    useStandardDeck = ifStandardDeck
     mode.value = modes.CARDDISPLAY
 }
 function newSetup() {
@@ -26,7 +30,7 @@ function newSetup() {
 <template>
   <h1>GroundEffect</h1>
   <h3>Legends deck replacement</h3>
-  <carddisplay v-if="mode == modes.CARDDISPLAY" :colors="colors" :handicap="handicap" @back-to-setup="newSetup"/>
+  <carddisplay v-if="mode == modes.CARDDISPLAY" :colors="colors" :handicap="handicap" :useStandardDeck="useStandardDeck" :regenOnShuffle="regenOnShuffle" @back-to-setup="newSetup"/>
   <setupscreen v-else-if="mode == modes.SETUPSCREEN" :colors="colors" @submit="newGame" />
 </template>
 
