@@ -9,16 +9,15 @@ const props = defineProps({
 })
 import { shuffle, generateDeck } from '/src/logic.js'
 
-let deck = generateDeck(props.colors)
+let deck = generateDeck(props.colors, props.useStandardDeck)
 const currentCard = ref(0)
 
 function nextCard() {
-    console.log(props.regenOnShuffle)
     currentCard.value++
     if (currentCard.value >= 10) {
         currentCard.value = 0
         if (props.regenOnShuffle) {
-            deck = generateDeck(props.colors)
+            deck = generateDeck(props.colors, props.useStandardDeck)
         } else {
             shuffle(deck)
         }

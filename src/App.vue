@@ -69,6 +69,4 @@ h3 {
     text-align: center;
     margin: 10px;
 }
-h6 {
-}
 </style>

@@ -27,7 +27,10 @@ function submitSetup() {
             colors.add(col)
         }
     }
-    emit('submit', ifStandardDeck, ifRegenOnShuffle, colors)
+    if (ifStandardDeck) {
+        ifRegenOnShuffle.value = false
+    }
+    emit('submit', ifStandardDeck.value, ifRegenOnShuffle.value, colors)
 }
 
 </script>
@@ -39,7 +42,7 @@ function submitSetup() {
             <input type="checkbox" v-model="ifStandardDeck" id="standard_deck">
             Use standard deck?
         </label><br>
-        <label>
+        <label v-if="!ifStandardDeck">
             <input type="checkbox" v-model="ifRegenOnShuffle" id="regen_on_shuffle">
             Generate a new deck instead of shuffling?
         </label><br>
@@ -62,7 +65,7 @@ function submitSetup() {
 <style>
 #setup_div {
     margin: auto
-    
+
 }
 
 </style>
