@@ -6,9 +6,12 @@ const props = defineProps({
 })
 
 const AllColors = new Set(["black", "blue", "green", "grey", "orange", "purple", "red", "yellow"])
+const AllHandicaps = new Set([-1, 0, 1, 2, 3])
 
 const ifStandardDeck = ref(false)
 const ifRegenOnShuffle = ref(false)
+const handicap = ref(0)
+const ifHalfHandicap = ref(false)
 
 const selectedColors = new Object()
 for (const col of AllColors) {
@@ -30,7 +33,7 @@ function submitSetup() {
     if (ifStandardDeck) {
         ifRegenOnShuffle.value = false
     }
-    emit('submit', ifStandardDeck.value, ifRegenOnShuffle.value, colors)
+    emit('submit', ifStandardDeck.value, ifRegenOnShuffle.value, handicap.value, ifHalfHandicap.value, colors)
 }
 
 </script>
@@ -39,13 +42,21 @@ function submitSetup() {
     <form id="setup_form">
       <span id="general_options">
         <label>
-            <input type="checkbox" v-model="ifStandardDeck" id="standard_deck">
-            Use standard deck?
+          <input type="checkbox" v-model="ifStandardDeck" id="standard_deck">
+          Use standard deck?
         </label><br>
         <label v-if="!ifStandardDeck">
-            <input type="checkbox" v-model="ifRegenOnShuffle" id="regen_on_shuffle">
-            Generate a new deck instead of shuffling?
+          <input type="checkbox" v-model="ifRegenOnShuffle" id="regen_on_shuffle">
+          Generate a new deck instead of shuffling?
         </label><br>
+        <label>Difficulty handicap:</label>
+        <select id="handicap_selector" v-model="handicap">
+          <option v-for="hc in AllHandicaps">{{ hc }}</option>
+        </select>
+        <label v-if="handicap != 0">
+          <input type="checkbox" v-model="ifHalfHandicap" id="half_handicap">
+          Apply handicap value only half the time?
+        </label>
       </span>
       <span v-if="!ifStandardDeck" id="color_selector">
         <ul id="color_list">

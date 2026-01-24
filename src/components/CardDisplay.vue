@@ -4,6 +4,7 @@ import { ref } from 'vue'
 const props = defineProps({
     colors: Set,
     handicap: 0,
+    halfHandicap: false,
     useStandardDeck: false,
     regenOnShuffle: false
 })
@@ -24,6 +25,23 @@ function nextCard() {
     }
 }
 
+function calculateSpeed(speed) {
+    if (!props.halfHandicap) {
+        console.log("Handicap not applicable")
+        return speed + props.handicap
+    }
+    if (Math.random() > 0.5) {
+        console.log("Handicap applied")
+        return speed + props.handicap
+    }
+    if (props.handicap > 0) {
+        console.log("Handicap reduced")
+        return speed + props.handicap - 1
+    }
+    console.log("Handicap unapplied")
+    return speed
+}
+
 const emit = defineEmits(['backToSetup'])
 
 </script>
@@ -41,7 +59,7 @@ const emit = defineEmits(['backToSetup'])
         <tr class="card_table_row" v-for="row in deck[currentCard]">
           <td class="card_table_cell"><img :src="'./assets/cars/' + row.color + '_car.png'" :alt="row.color + ' car'"></td>
           <td class="card_table_cell"><img :src="'./assets/signs/sign_' + row.cornerSpeed + '.png'" :alt="'Corner speed: ' + row.cornerSpeed"></td>
-          <td class="card_table_cell"><span class="sspeed_span">{{ row.straightSpeed + props.handicap }}</span></td>
+          <td class="card_table_cell"><span class="sspeed_span">{{ calculateSpeed(row.straightSpeed) }}</span></td>
         </tr>
       </tbody>
     </table>
