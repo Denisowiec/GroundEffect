@@ -8,13 +8,17 @@ const modes = Object.freeze({
 })
 
 let colors = new Set(["black", "blue", "green", "grey", "orange", "purple", "red", "yellow"])
+let handicap = 0
 
 const mode = ref(modes.SETUPSCREEN)
 
 function newGame(ifStandardDeck, ifRegenOnShuffle, selectedColors) {
-    console.log("submit clicked")
     colors = selectedColors
+    handicap = 0
     mode.value = modes.CARDDISPLAY
+}
+function newSetup() {
+    mode.value = modes.SETUPSCREEN
 }
 
 </script>
@@ -22,34 +26,45 @@ function newGame(ifStandardDeck, ifRegenOnShuffle, selectedColors) {
 <template>
   <h1>GroundEffect</h1>
   <h3>Legends deck replacement</h3>
-  <carddisplay v-if="mode == modes.CARDDISPLAY" :colors="colors"/>
+  <carddisplay v-if="mode == modes.CARDDISPLAY" :colors="colors" :handicap="handicap" @back-to-setup="newSetup"/>
   <setupscreen v-else-if="mode == modes.SETUPSCREEN" :colors="colors" @submit="newGame" />
 </template>
 
 <style>
 body {
     background-color: slategray;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: large;
+}
+button {
+    padding: 4px 8px;
+    background-color: rgb(22, 54, 102);
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    text-align: center;
+}
+button:hover {
+    background-color: rgb(42, 78, 145);
 }
 img {
     margin: 0px;
 }
 h1 {
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: xx-large;
     font-size: 70px;
     text-align: center;
     margin: 10px;
 }
 h3 {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 30px;
+    font-size: x-large;
     text-align: center;
     margin: 10px;
 }
 h6 {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 50px;
-    color: white;
-    text-shadow: 0px 0px 8px black;
-    margin: 0px;
 }
 </style>

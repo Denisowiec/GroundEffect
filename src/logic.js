@@ -9,7 +9,6 @@ export function shuffle(array) {
 }
 
 export function generateDeck(colors) {
-    console.log(colors)
     // Accepts an array of color names
     // Returns an array of objects containing the color name, a corner speed value and a straight speed value
     const possibleCards = [

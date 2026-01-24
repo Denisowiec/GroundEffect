@@ -2,7 +2,9 @@
 import { ref } from 'vue'
 
 const props = defineProps({
-    colors: Set
+    colors: Set,
+    handicap: 0,
+    regenOnShuffle: false
 })
 import { shuffle, generateDeck } from '/src/logic.js'
 
@@ -10,12 +12,18 @@ const deck = generateDeck(props.colors)
 const currentCard = ref(0)
 
 function nextCard() {
-  currentCard.value++
-  if (currentCard.value >= 10) {
-    currentCard.value = 0
-    shuffle(deck)
-  }
+    currentCard.value++
+    if (currentCard.value >= 10) {
+        currentCard.value = 0
+        if (props.regenOnShuffle) {
+            deck = generateDeck(props.colors)
+        } else {
+            shuffle(deck)
+        }
+    }
 }
+
+const emit = defineEmits(['backToSetup'])
 
 </script>
 <template>
@@ -30,24 +38,20 @@ function nextCard() {
       </thead>
       <tbody>
         <tr class="card_table_row" v-for="row in deck[currentCard]">
-          <td class="card_table_cell"><img :src="'./assets/cars/' + row.color + '_car.png'" :alt="row.color + 'car'"></td>
+          <td class="card_table_cell"><img :src="'./assets/cars/' + row.color + '_car.png'" :alt="row.color + ' car'"></td>
           <td class="card_table_cell"><img :src="'./assets/signs/sign_' + row.cornerSpeed + '.png'" :alt="'Corner speed: ' + row.cornerSpeed"></td>
-          <td class="card_table_cell"><h6>{{ row.straightSpeed }}</h6></td>
+          <td class="card_table_cell"><span class="sspeed_span">{{ row.straightSpeed + props.handicap }}</span></td>
         </tr>
       </tbody>
     </table>
-      <div class="card_footer"><span id="card_counter">{{ (currentCard + 1) + " / 10" }}</span><button id="button_next" @:click="nextCard()">Next card</button></div>
   </div>
-    
+  <div class="card_footer">
+    <span id="card_counter">{{ (currentCard + 1) + " / 10" }}</span>
+    <button id="button_next" @:click="nextCard()">Next card</button>
+  </div>
+  <button id="button_backtosetup" @click="$emit('backToSetup')">Back to setup screen...</button>
 </template>
 <style>
-h6 {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 50px;
-    color: white;
-    text-shadow: 0px 0px 8px black;
-    margin: 0px;
-}
 #card {
     margin: auto;
     position: relative;
@@ -61,7 +65,7 @@ h6 {
     margin: auto;
     position: static;
     margin-top: 10px;
-    padding: 0px;
+    padding: 5px;
 }
 #card_counter {
     font-family: Arial, Helvetica, sans-serif;
@@ -72,21 +76,15 @@ h6 {
     float: left;
 }
 #button_next {
-    padding: 0px 4px;
-    background-color: darkblue;
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: bold;
     font-size: 30px;
-    color: white;
-    border: 2px solid black;
     border-radius: 10px;
-    position: relative;
     float: right;
-    text-align: center;
-    cursor: pointer;
 }
-#button_next:hover {
-    background-color: cornflowerblue;
+#button_backtosetup {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    float: none;
 }
 .card_table {
     color: black;
@@ -102,5 +100,13 @@ h6 {
     margin: 10px;
     width: 120px;
     height: 70px;
+}
+.sspeed_span {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: xx-large;
+    color: white;
+    text-shadow: 0px 0px 8px black;
+    margin: 0px;
+
 }
 </style>
