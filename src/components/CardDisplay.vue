@@ -2,23 +2,20 @@
 import { ref } from 'vue'
 
 const props = defineProps({
-    colors: Set,
-    handicap: 0,
-    halfHandicap: false,
-    useStandardDeck: false,
-    regenOnShuffle: false
+    config: Object
 })
+const config = props.config
 import { shuffle, generateDeck } from '/src/logic.js'
 
-let deck = generateDeck(props.colors, props.useStandardDeck)
+let deck = generateDeck(config.colors, config.ifStandardDeck)
 const currentCard = ref(0)
 
 function nextCard() {
     currentCard.value++
     if (currentCard.value >= 10) {
         currentCard.value = 0
-        if (props.regenOnShuffle) {
-            deck = generateDeck(props.colors, props.useStandardDeck)
+        if (config.ifRegenOnShuffle) {
+            deck = generateDeck(config.colors, config.ifStandardDeck)
         } else {
             shuffle(deck)
         }
@@ -26,19 +23,15 @@ function nextCard() {
 }
 
 function calculateSpeed(speed) {
-    if (!props.halfHandicap) {
-        console.log("Handicap not applicable")
-        return speed + props.handicap
+    if (!config.ifHalfHandicap) {
+        return speed + config.handicap
     }
     if (Math.random() > 0.5) {
-        console.log("Handicap applied")
-        return speed + props.handicap
+        return speed + config.handicap
     }
-    if (props.handicap > 0) {
-        console.log("Handicap reduced")
-        return speed + props.handicap - 1
+    if (config.handicap > 0) {
+        return speed + config.handicap - 1
     }
-    console.log("Handicap unapplied")
     return speed
 }
 

@@ -2,21 +2,22 @@
 import { ref } from 'vue'
 
 const props = defineProps({
-    colors: Set
+    config: Object
 })
+const config = props.config
 
 const AllColors = new Set(["black", "blue", "green", "grey", "red", "yellow", "orange", "purple", ])
 const AllHandicaps = new Set([-1, 0, 1, 2, 3])
 
-const ifStandardDeck = ref(false)
-const ifRegenOnShuffle = ref(false)
-const handicap = ref(0)
-const ifHalfHandicap = ref(false)
+const ifStandardDeck = ref(config.ifStandardDeck)
+const ifRegenOnShuffle = ref(config.ifRegenOnShuffle)
+const handicap = ref(config.handicap)
+const ifHalfHandicap = ref(config.ifHalfHandicap)
 
 const selectedColors = new Object()
 for (const col of AllColors) {
     selectedColors[col] = false
-    if (props.colors.has(col)) {
+    if (config.colors.has(col)) {
         selectedColors[col] = true
     }
 }
@@ -33,7 +34,12 @@ function submitSetup() {
     if (ifStandardDeck) {
         ifRegenOnShuffle.value = false
     }
-    emit('submit', ifStandardDeck.value, ifRegenOnShuffle.value, handicap.value, ifHalfHandicap.value, colors)
+    config.ifStandardDeck = ifStandardDeck.value
+    config.ifRegenOnShuffle = ifStandardDeck.value
+    config.handicap = handicap.value
+    config.ifHalfHandicap = ifHalfHandicap.value
+    config.colors = colors
+    emit('submit', config)
 }
 
 </script>

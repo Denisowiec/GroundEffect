@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { getConfig, saveConfig } from './logic'
 
 const modes = Object.freeze({
     SETUP: 0,
@@ -7,20 +8,26 @@ const modes = Object.freeze({
     SETUPSCREEN: 2
 })
 
-let colors = new Set(["black", "blue", "green", "grey", "red", "yellow"])
-let handicap = 0
-let halfHandicap = false
-let regenOnShuffle = false
-let useStandardDeck = false
+// default config
+let config = {}
+const loadedConfig = getConfig()
+if (loadedConfig == null) {
+    config = {
+        colors: new Set(["black", "blue", "green", "grey", "red", "yellow"]),
+        handicap: 0,
+        ifHalfHandicap: false,
+        ifRegenOnShuffle: false,
+        ifStandardDeck: false
+    }
+} else {
+    config = loadedConfig
+}
 
 const mode = ref(modes.SETUPSCREEN)
 
-function newGame(ifStandardDeck, ifRegenOnShuffle, handicapValue, ifHalfHandicap, selectedColors) {
-    colors = selectedColors
-    handicap = Number(handicapValue)
-    halfHandicap = ifHalfHandicap
-    regenOnShuffle = ifRegenOnShuffle
-    useStandardDeck = ifStandardDeck
+function newGame(receivedConfig) {
+    config = receivedConfig
+    saveConfig(config)
     mode.value = modes.CARDDISPLAY
 }
 function newSetup() {
@@ -32,8 +39,8 @@ function newSetup() {
 <template>
   <h1>GroundEffect</h1>
   <h3>Legends deck replacement</h3>
-  <carddisplay v-if="mode == modes.CARDDISPLAY" :colors="colors" :handicap="handicap" :useStandardDeck="useStandardDeck" :regenOnShuffle="regenOnShuffle" :halfHandicap="halfHandicap" @back-to-setup="newSetup"/>
-  <setupscreen v-else-if="mode == modes.SETUPSCREEN" :colors="colors" @submit="newGame" />
+  <carddisplay v-if="mode == modes.CARDDISPLAY" :config="config" @back-to-setup="newSetup"/>
+  <setupscreen v-else-if="mode == modes.SETUPSCREEN" :config="config" @submit="newGame" />
 </template>
 
 <style>

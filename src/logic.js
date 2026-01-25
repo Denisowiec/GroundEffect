@@ -138,3 +138,31 @@ export function generateDeck(colors, standard = false) {
 
     return deck
 }
+
+export function saveConfig(config) {
+    const configToSave = {
+        colors: Array.from(config.colors),
+        handicap: config.handicap,
+        if_half_handicap: config.ifHalfHandicap,
+        if_regen_on_shuffle: config.ifRegenOnShuffle,
+        if_standard_deck: config.ifStandardDeck
+    }
+    localStorage.setItem('config', JSON.stringify(configToSave))
+}
+
+export function getConfig() {
+    const data = localStorage.getItem('config')
+    if (data == null) {
+        return null
+    }
+    const parsed = JSON.parse(data)
+
+    const config = {
+        colors: new Set(parsed.colors),
+        handicap: Number(parsed.handicap),
+        ifHalfHandicap: parsed.if_half_handicap,
+        ifRegenOnShuffle: parsed.if_regen_on_shuffle,
+        ifStandardDeck: parsed.if_standard_deck
+    }
+    return config
+}
