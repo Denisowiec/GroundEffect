@@ -1,11 +1,13 @@
 <script setup>
 import { ref } from 'vue'
 import { getConfig, saveConfig } from './logic'
+import ChampionshipResults from './components/ChampionshipResults.vue'
 
 const modes = Object.freeze({
     SETUP: 0,
     CARDDISPLAY: 1,
-    SETUPSCREEN: 2
+    SETUPSCREEN: 2,
+    CHAMPIONSHIPRESULTS: 3
 })
 
 // default config
@@ -23,7 +25,7 @@ if (loadedConfig == null) {
     config = loadedConfig
 }
 
-const mode = ref(modes.SETUPSCREEN)
+const mode = ref(modes.CHAMPIONSHIPRESULTS)
 
 function newGame(receivedConfig) {
     config = receivedConfig
@@ -41,6 +43,7 @@ function newSetup() {
   <h3>Legends deck replacement</h3>
   <carddisplay v-if="mode == modes.CARDDISPLAY" :config="config" @back-to-setup="newSetup"/>
   <setupscreen v-else-if="mode == modes.SETUPSCREEN" :config="config" @submit="newGame" />
+  <championship-results v-else-if="mode == modes.CHAMPIONSHIPRESULTS" :config="config" @submit="newGame"/>
 </template>
 
 <style>
