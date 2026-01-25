@@ -5,7 +5,7 @@ const props = defineProps({
     colors: Set
 })
 
-const AllColors = new Set(["black", "blue", "green", "grey", "orange", "purple", "red", "yellow"])
+const AllColors = new Set(["black", "blue", "green", "grey", "red", "yellow", "orange", "purple", ])
 const AllHandicaps = new Set([-1, 0, 1, 2, 3])
 
 const ifStandardDeck = ref(false)
@@ -16,7 +16,7 @@ const ifHalfHandicap = ref(false)
 const selectedColors = new Object()
 for (const col of AllColors) {
     selectedColors[col] = false
-    if (AllColors.has(col)) {
+    if (props.colors.has(col)) {
         selectedColors[col] = true
     }
 }

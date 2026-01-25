@@ -7,7 +7,7 @@ const modes = Object.freeze({
     SETUPSCREEN: 2
 })
 
-let colors = new Set(["black", "blue", "green", "grey", "orange", "purple", "red", "yellow"])
+let colors = new Set(["black", "blue", "green", "grey", "red", "yellow"])
 let handicap = 0
 let halfHandicap = false
 let regenOnShuffle = false
