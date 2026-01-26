@@ -1,7 +1,16 @@
 <script setup>
+import { ref } from 'vue'
+
 const props = defineProps({
     config: Object
 })
+const modes = Object.freeze({
+    CHAMPIONSHIP_SETUP: 0,
+    ADD_RESULTS: 1,
+    RESULTS_DISPLAY: 2,
+})
+
+const mode = ref(modes.CHAMPIONSHIP_SETUP)
 
 const champData = {
     colors: props.config.colors,
@@ -19,7 +28,7 @@ for (let r of champData.races) {
 
 </script>
 <template>
-  <div id="championship_div">
+  <div id="championship_div" v-if="mode == modes.RESULTS_DISPLAY">
     <table id="championship_table">
       <thead>
         <tr>
@@ -36,6 +45,9 @@ for (let r of champData.races) {
         </tr>
       </tbody>
     </table>
+  </div>
+  <div id="chmp_setup_div" v-if="mode == modes.CHAMPIONSHIP_SETUP">
+
   </div>
 </template>
 <style>
