@@ -44,7 +44,7 @@ function newSetup() {
   </header>
   <carddisplay v-if="mode == modes.CARDDISPLAY" :config="config" @back-to-setup="newSetup"/>
   <setupscreen v-else-if="mode == modes.SETUPSCREEN" :config="config" @submit="newGame" />
-  <championshipresults v-else-if="mode == modes.CHAMPIONSHIPRESULTS" :config="config" @submit="newGame"/>
+  <championshipresults v-else-if="mode == modes.CHAMPIONSHIPRESULTS" :config="config"/>
 </template>
 
 <style>
