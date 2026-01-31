@@ -1,3 +1,6 @@
+export const AllColors = new Set(["black", "blue", "green", "grey", "red", "yellow", "orange", "purple",])
+export const AllTracks = new Set(["Great Britain", "France", "Italia", "USA", "Japan", "Mexico", "Netherlands", "Spain", "Germany", "South Africa"])
+
 export function shuffle(array) {
     // Fisher-Yatess shuffle algorith, taken from w3schools JS tutorial
     for (let i = array.length -1; i > 0; i--) {
@@ -139,6 +142,7 @@ export function generateDeck(colors, standard = false) {
     return deck
 }
 
+// Functions related to preserving basic configuration in-browser
 export function saveConfig(config) {
     const configToSave = {
         colors: Array.from(config.colors),
@@ -165,4 +169,153 @@ export function getConfig() {
         ifStandardDeck: parsed.if_standard_deck
     }
     return config
+}
+
+// Functions related to Championship results tracker
+export function Results(colors) {
+    this.botColors = colors
+    this.playerColors = []
+    this.players = new Map()
+    this.raceNames = []
+    this.results = []
+
+    this.getAllColors = function () {
+        return this.playerColors.concat(this.botColors)
+    }
+    
+    this.getAvColors = function () {
+        let all = Array.from(AllColors)
+        let used = this.getAllColors()
+        let av = []
+        for (let c of all) {
+            if (!used.includes(c)) {
+                av.push(c)
+            }
+        }
+        return av
+    }
+
+    this.getAvTracks = function () {
+        let av = []
+        for (let t of AllTracks) {
+            if (!this.raceNames.includes(t)) {
+                av.push(t)
+            }
+        }
+        return av
+    }
+
+    this.addPlayer = function(name, color) {
+        this.players.set(color, name)
+        this.playerColors.push(color)
+
+        for (let r of this.results) {
+            r.set(color, 0)
+        }
+    }
+
+    this.editPlayerColor = function (oldColor, newColor) {
+        let name = players.get(oldColor)
+        this.players.delete(oldColor)
+        this.playerColors.splice(this.playerColors.indexOf(oldColor))
+        this.addPlayer(name, newColor)
+    }
+
+    this.editPlayerName = function (col, name) {
+        this.players.set(col, name)
+    }
+
+    this.removePlayer = function (col) {
+        this.players.delete(col)
+        this.playerColors.splice(this.playerColors.indexOf(col))
+        for (let r of this.results) {
+            r.delete(col)
+        }
+    }
+
+    this.addRace = function (name) {
+        this.raceNames.push(name)
+        let newMap = new Map()
+        for (let c of this.getAllColors()) {
+            newMap.set(c, 0)
+        }
+        this.results.push(newMap)
+    }
+
+    this.editRaceName = function (oldName, newName) {
+        this.raceNames[this.raceNames.indexOf(oldName)] = newName
+    }
+
+    this.removeRace = function (name) {
+        raceNum = this.raceNames.indexOf(name)
+        this.raceNames.splice(raceNum)
+        this.results.splice(raceNum)
+    }
+
+    this.getResult = function (raceName, color) {
+        return this.results[this.raceNames.indexOf(raceName)].get(color)
+    }
+
+    this.putResults = function(race, col, points) {
+        this.results[this.raceNames.indexOf(race)].set(col, Number(points))
+    }
+
+    this.sumResults = function (color) {
+        let sum = 0
+        for (let r of this.results) {
+            sum += r.get(color)
+        }
+        return sum
+    }
+}
+
+export function saveChampResults(res) {
+    const objectifiedResults = []
+    for (let r of res.results) {
+        objectifiedResults.push(Object.fromEntries(r))
+    }
+    const resToSave = {
+        colors: res.getAllColors(),
+        player_names: Object.fromEntries(res.players),
+        race_names: res.raceNames,
+        results: objectifiedResults
+    }
+    localStorage.setItem('championship_results', JSON.stringify(resToSave))
+}
+
+export function getChampResults() {
+    const data = localStorage.getItem('championship_results')
+    if (data == null) {
+        return null
+    }
+    const parsed = JSON.parse(data)
+
+    let usedCols = []
+    for (let col of Object.keys(parsed.player_names)) {
+        usedCols.push(col)
+    }
+    let botColors = []
+    for (let col of parsed.colors) {
+        if (!usedCols.includes(col)) {
+            botColors.push(col)
+        }
+    }
+    botColors.sort()
+
+    const res = new Results(botColors)
+    for (let [col, name] of Object.entries(parsed.player_names)) {
+        res.addPlayer(name, col)
+        usedCols.push(col)
+    }
+
+    for (let r of parsed.race_names) {
+        res.addRace(r)
+    }
+    for (let i = 0; i < parsed.results.length; i++) {
+        let r = res.raceNames[i]
+        for (let [c, points] of Object.entries(parsed.results[i])) {
+            res.putResults(r, c, Number(points))
+        }
+    }
+    return res
 }

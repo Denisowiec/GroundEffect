@@ -24,15 +24,15 @@ function nextCard() {
 
 function calculateSpeed(speed) {
     if (!config.ifHalfHandicap) {
-        return speed + config.handicap
+        return Number(speed) + Number(config.handicap)
     }
     if (Math.random() > 0.5) {
-        return speed + config.handicap
+        return Number(speed) + Number(config.handicap)
     }
     if (config.handicap > 0) {
-        return speed + config.handicap - 1
+        return Number(speed) + Number(config.handicap) - 1
     }
-    return speed
+    return Number(speed)
 }
 
 const emit = defineEmits(['backToSetup'])

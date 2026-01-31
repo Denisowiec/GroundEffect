@@ -1,12 +1,12 @@
 <script setup>
 import { ref } from 'vue'
+import { AllColors } from '@/logic'
 
 const props = defineProps({
     config: Object
 })
 const config = props.config
 
-const AllColors = new Set(["black", "blue", "green", "grey", "red", "yellow", "orange", "purple", ])
 const AllHandicaps = new Set([-1, 0, 1, 2, 3])
 
 const ifStandardDeck = ref(config.ifStandardDeck)

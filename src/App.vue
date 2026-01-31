@@ -24,7 +24,10 @@ if (loadedConfig == null) {
     config = loadedConfig
 }
 
-const mode = ref(modes.CHAMPIONSHIPRESULTS)
+// default championship results
+let champResults = null
+
+const mode = ref(modes.SETUPSCREEN)
 
 function newGame(receivedConfig) {
     config = receivedConfig
@@ -34,6 +37,11 @@ function newGame(receivedConfig) {
 function newSetup() {
     mode.value = modes.SETUPSCREEN
 }
+function backToGame(results) {
+    console.log(results)
+    champResults = results
+    mode.value = modes.CARDDISPLAY
+}
 
 </script>
 
@@ -42,12 +50,20 @@ function newSetup() {
     <h1>GroundEffect</h1>
     <h3>Legends deck replacement</h3>
   </header>
-  <carddisplay v-if="mode == modes.CARDDISPLAY" :config="config" @back-to-setup="newSetup"/>
-  <setupscreen v-else-if="mode == modes.SETUPSCREEN" :config="config" @submit="newGame" />
-  <championshipresults v-else-if="mode == modes.CHAMPIONSHIPRESULTS" :config="config"/>
+  <carddisplay v-if="mode === modes.CARDDISPLAY" :config="config" @back-to-setup="newSetup"/>
+  <setupscreen v-else-if="mode === modes.SETUPSCREEN" :config="config" @submit="newGame" />
+  <championshipresults v-else-if="mode === modes.CHAMPIONSHIPRESULTS" :config="config" :results="champResults" @exit="backToGame"/>
+  <button @click="mode = modes.CHAMPIONSHIPRESULTS" id="champ_results_button" v-if="mode !== modes.CHAMPIONSHIPRESULTS">Championship results</button>
 </template>
 
 <style>
+#champ_results_button {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    float: none;
+
+}
 body {
     background-color: slategray;
     font-family: Arial, Helvetica, sans-serif;
