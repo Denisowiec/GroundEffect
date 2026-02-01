@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { getCurrentInstance, ref } from 'vue'
 import { Results, saveChampResults, getChampResults } from '@/logic'
 
@@ -18,7 +18,6 @@ const mode = ref(modes.NORMAL)
 // Loading championship results
 // The one forwarded from the app takes precedent over the one in browser storage
 const res = ref(new Results(Array.from(props.config.colors)))
-console.log(props.results)
 if (props.results != null) {
     res.value = props.results
 } else {

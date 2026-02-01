@@ -1,7 +1,21 @@
 export const AllColors = new Set(["black", "blue", "green", "grey", "red", "yellow", "orange", "purple",])
 export const AllTracks = new Set(["Great Britain", "France", "Italia", "USA", "Japan", "Mexico", "Netherlands", "Spain", "Germany", "South Africa"])
 
-export function shuffle(array) {
+type Cardrow = {
+    color: string,
+    straightSpeed: number,
+    cornerSpeed: number
+}
+
+type Config = {
+        colors: string[],
+        handicap: number,
+        ifHalfHandicap: boolean,
+        ifRegenOnShuffle: boolean,
+        ifStandardDeck: boolean
+}
+
+export function shuffle(array: any[]) {
     // Fisher-Yatess shuffle algorith, taken from w3schools JS tutorial
     for (let i = array.length -1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i+1));
@@ -11,7 +25,7 @@ export function shuffle(array) {
     }
 }
 
-export function generateDeck(colors, standard = false) {
+export function generateDeck(colors: Set<string>, standard = false): Cardrow[][] {
     // Accepts an array of color names
     // Returns an array of objects containing the color name, a corner speed value and a straight speed value
 
@@ -99,7 +113,7 @@ export function generateDeck(colors, standard = false) {
             ]]
     }
 
-    const possibleCards = [
+    const possibleCards: [number, number][] = [
         [0, 10],
         [0, 11],
         [1, 12],
@@ -116,23 +130,27 @@ export function generateDeck(colors, standard = false) {
     shuffle(options)
     const doubled = options.concat(options)
 
-    const matrix = []
+    const matrix: [number, number][][] = []
     for (let i = 0; i < 10; i++) {
         matrix[i] = doubled.slice(i, i+10)
     }
 
     shuffle(matrix)
 
-    const deck = []
+    const deck: Cardrow[][] = []
     
     for (let option of matrix) {
-        let card = []
+        let card: Cardrow[] = []
         let offset = 0
         for (let col of colors) {
-            let row = new Object
-            row.color = col
-            row.cornerSpeed = option[offset][0]
-            row.straightSpeed = option[offset][1]
+            if (offset > option.length) {
+                break
+            }
+            let row: Cardrow = {
+                color: col,
+                cornerSpeed: option[offset]![0],
+                straightSpeed: option[offset]![1]
+            }
             card.push(row)
             offset++
         }
@@ -143,7 +161,7 @@ export function generateDeck(colors, standard = false) {
 }
 
 // Functions related to preserving basic configuration in-browser
-export function saveConfig(config) {
+export function saveConfig(config: Config) {
     const configToSave = {
         colors: Array.from(config.colors),
         handicap: config.handicap,
@@ -172,18 +190,28 @@ export function getConfig() {
 }
 
 // Functions related to Championship results tracker
-export function Results(colors) {
-    this.botColors = colors
-    this.playerColors = []
-    this.players = new Map()
-    this.raceNames = []
-    this.results = []
+export class Results {
+    botColors: string[]
+    playerColors: string[]
+    players: Map<string, string>
+    raceNames: string[]
+    results: Map<string, number>[]
 
-    this.getAllColors = function () {
+    constructor(colors: string[]) {
+        this.botColors = colors
+        this.playerColors = []
+        this.playerColors = []
+        this.players = new Map<string, string>()
+        this.raceNames = []
+        this.results = []
+    }
+
+
+    getAllColors(): string[] {
         return this.playerColors.concat(this.botColors)
     }
     
-    this.getAvColors = function () {
+    getAvColors(): string[] {
         let all = Array.from(AllColors)
         let used = this.getAllColors()
         let av = []
@@ -195,7 +223,7 @@ export function Results(colors) {
         return av
     }
 
-    this.getAvTracks = function () {
+    getAvTracks(): string[] {
         let av = []
         for (let t of AllTracks) {
             if (!this.raceNames.includes(t)) {
@@ -205,7 +233,7 @@ export function Results(colors) {
         return av
     }
 
-    this.addPlayer = function(name, color) {
+    addPlayer(name: string, color: string) {
         this.players.set(color, name)
         this.playerColors.push(color)
 
@@ -214,18 +242,22 @@ export function Results(colors) {
         }
     }
 
-    this.editPlayerColor = function (oldColor, newColor) {
-        let name = players.get(oldColor)
+    editPlayerColor(oldColor: string, newColor: string) {
+        let name = this.players.get(oldColor)
+        if (name === undefined) {
+            console.log("Error while changing player color: player doesn't exist")
+            return
+        }
         this.players.delete(oldColor)
         this.playerColors.splice(this.playerColors.indexOf(oldColor))
         this.addPlayer(name, newColor)
     }
 
-    this.editPlayerName = function (col, name) {
+    editPlayerName(col: string, name: string) {
         this.players.set(col, name)
     }
 
-    this.removePlayer = function (col) {
+    removePlayer(col: string) {
         this.players.delete(col)
         this.playerColors.splice(this.playerColors.indexOf(col))
         for (let r of this.results) {
@@ -233,7 +265,7 @@ export function Results(colors) {
         }
     }
 
-    this.addRace = function (name) {
+    addRace(name: string) {
         this.raceNames.push(name)
         let newMap = new Map()
         for (let c of this.getAllColors()) {
@@ -242,18 +274,24 @@ export function Results(colors) {
         this.results.push(newMap)
     }
 
-    this.editRaceName = function (oldName, newName) {
+    editRaceName (oldName: string, newName: string) {
         this.raceNames[this.raceNames.indexOf(oldName)] = newName
     }
 
-    this.removeRace = function (name) {
-        raceNum = this.raceNames.indexOf(name)
+    removeRace(name: string) {
+        let raceNum = this.raceNames.indexOf(name)
         this.raceNames.splice(raceNum)
         this.results.splice(raceNum)
     }
 
-    this.getResult = function (raceName, color) {
-        return this.results[this.raceNames.indexOf(raceName)].get(color)
+    getResult(raceName: string, color: string): number | null {
+        if (!this.raceNames.includes(raceName)) {
+            return null
+        }
+        let raceIndex = this.raceNames.indexOf(raceName)
+        if (!this.results[raceIndex].includes(color))
+
+        return this.results[raceIndex].get(color)
     }
 
     this.putResults = function(race, col, points) {
