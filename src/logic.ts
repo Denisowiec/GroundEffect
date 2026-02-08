@@ -7,7 +7,7 @@ type Cardrow = {
     cornerSpeed: number
 }
 
-type Config = {
+export type Config = {
         colors: string[],
         handicap: number,
         ifHalfHandicap: boolean,
@@ -172,15 +172,15 @@ export function saveConfig(config: Config) {
     localStorage.setItem('config', JSON.stringify(configToSave))
 }
 
-export function getConfig() {
+export function getConfig(): Config | null {
     const data = localStorage.getItem('config')
     if (data == null) {
         return null
     }
     const parsed = JSON.parse(data)
 
-    const config = {
-        colors: new Set(parsed.colors),
+    const config: Config = {
+        colors: Array.from(parsed.colors),
         handicap: Number(parsed.handicap),
         ifHalfHandicap: parsed.if_half_handicap,
         ifRegenOnShuffle: parsed.if_regen_on_shuffle,
@@ -195,7 +195,7 @@ export class Results {
     playerColors: string[]
     players: Map<string, string>
     raceNames: string[]
-    results: Map<string, number>[]
+    results: Array<Map<string, number>>
 
     constructor(colors: string[]) {
         this.botColors = colors
@@ -285,29 +285,49 @@ export class Results {
     }
 
     getResult(raceName: string, color: string): number | null {
-        if (!this.raceNames.includes(raceName)) {
-            return null
-        }
         let raceIndex = this.raceNames.indexOf(raceName)
-        if (!this.results[raceIndex].includes(color))
-
-        return this.results[raceIndex].get(color)
+        if (raceIndex === -1) {
+            throw new Error("race name not found")
+        }
+        let row = this.results[raceIndex]
+        if (row === undefined) {
+            throw new Error("results row out of bounds")
+        }
+        let score = row.get(color)
+        if (score !== undefined) {
+            return score
+        }
+        return null
     }
 
-    this.putResults = function(race, col, points) {
-        this.results[this.raceNames.indexOf(race)].set(col, Number(points))
+    putResults(race: string, col: string, points: number) {
+        let raceNum = this.raceNames.indexOf(race)
+        if (raceNum === -1) {
+            throw new Error("race name not found")
+        }
+        let resultRow = this.results[raceNum]
+        if (resultRow !== undefined) {
+            resultRow.set(col, Number(points))
+        } else {
+            throw new Error("results table out of bounds")
+        }
     }
 
-    this.sumResults = function (color) {
+    sumResults(color: string): number {
         let sum = 0
         for (let r of this.results) {
-            sum += r.get(color)
+            let score = r.get(color)
+            if (score !== undefined) {
+                sum += score
+            } else {
+                throw new Error("results table out of bounds")
+            }
         }
         return sum
     }
 }
 
-export function saveChampResults(res) {
+export function saveChampResults(res: Results) {
     const objectifiedResults = []
     for (let r of res.results) {
         objectifiedResults.push(Object.fromEntries(r))
@@ -321,7 +341,7 @@ export function saveChampResults(res) {
     localStorage.setItem('championship_results', JSON.stringify(resToSave))
 }
 
-export function getChampResults() {
+export function getChampResults(): Results | null {
     const data = localStorage.getItem('championship_results')
     if (data == null) {
         return null
@@ -342,7 +362,7 @@ export function getChampResults() {
 
     const res = new Results(botColors)
     for (let [col, name] of Object.entries(parsed.player_names)) {
-        res.addPlayer(name, col)
+        res.addPlayer(name as string, col)
         usedCols.push(col)
     }
 
@@ -351,6 +371,9 @@ export function getChampResults() {
     }
     for (let i = 0; i < parsed.results.length; i++) {
         let r = res.raceNames[i]
+        if (r === undefined) {
+            throw new Error("results table out of bounds")
+        }
         for (let [c, points] of Object.entries(parsed.results[i])) {
             res.putResults(r, c, Number(points))
         }

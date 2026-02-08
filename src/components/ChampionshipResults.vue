@@ -1,19 +1,19 @@
 <script lang="ts" setup>
-import { getCurrentInstance, ref } from 'vue'
-import { Results, saveChampResults, getChampResults } from '@/logic'
+import { ref } from 'vue'
+import { Results, type Config, saveChampResults, getChampResults } from '@/logic'
 
-const props = defineProps({
-    config: Object,
-    results: Object
-})
+const props = defineProps<{
+    config: Config,
+    results: Results
+}>()
 
-const modes = Object.freeze({
-    NORMAL: 0,
-    ADDPLAYER: 1,
-    ADDRACE: 2
-})
+enum Modes {
+    NORMAL,
+    ADDPLAYER,
+    ADDRACE
+}
 
-const mode = ref(modes.NORMAL)
+const mode = ref(Modes.NORMAL)
 
 // Loading championship results
 // The one forwarded from the app takes precedent over the one in browser storage
@@ -28,30 +28,52 @@ if (props.results != null) {
 }
 
 // Reactive values for the modal dialogs
-const newPlayer = ref({ name: null, color: null })
+const newPlayerName = ref<string | null>(null)
+const newPlayerColor = ref<string | null>(null)
 const newRace = ref("")
 
 function addPlayerCallback() {
-    newPlayer.value = {name: null, color: null}
-    mode.value = modes.ADDPLAYER
+    newPlayerName.value = null
+    newPlayerColor.value = null
+    mode.value = Modes.ADDPLAYER
 }
 
 function playerSubmitCallback() {
-    if (newPlayer.name === null || newPlayer.color === null) {
+    if (newPlayerName.value === null || newPlayerColor.value === null) {
         return
     }
-    res.value.addPlayer(newPlayer.value.name, newPlayer.value.color)
-    mode.value = modes.NORMAL
+    res.value.addPlayer(newPlayerName.value, newPlayerColor.value)
+    mode.value = Modes.NORMAL
 }
 
 function addRaceCallback() {
     newRace.value = ""
-    mode.value = modes.ADDRACE
+    mode.value = Modes.ADDRACE
 }
 
 function addRaceSubmitCallback() {
     res.value.addRace(newRace.value)
-    mode.value = modes.NORMAL
+    mode.value = Modes.NORMAL
+}
+
+function editPlayerNameCallback(event: Event, color: string) {
+    let target = event.target as HTMLElement
+    let text = target.innerText
+    res.value.editPlayerName(color, text.trim())
+}
+
+function editResultsCallback(event: Event, raceName: string, color: string) {
+    let target = event.target as HTMLElement
+    let content = target.innerText.trim()
+    let number = parseInt(content)
+    res.value.putResults(raceName, color, number)
+}
+
+function loadChampResultsCallback() {
+    let loadedResults = getChampResults()
+    if (loadedResults !== null) {
+        res.value = loadedResults
+    }
 }
 
 const emit = defineEmits(['exit'])
@@ -65,15 +87,15 @@ function exitChampScreen() {
     <table id="championship_table">
       <thead>
         <tr>
-          <th><button v-if="mode !== modes.ADDPLAYER" id="add_player_button" @click="addPlayerCallback()">Add player</button></th>
+          <th><button v-if="mode !== Modes.ADDPLAYER" id="add_player_button" @click="addPlayerCallback()">Add player</button></th>
           <th v-for="col of res.getAllColors()"><img :src="'./assets/cars/' + col + '_car.png'" :alt="col + ' car'"><br>
-          <span v-if="res.players.has(col)" contenteditable="true" spellcheck="false" @blur="res.editPlayerName(col, $event.target.innerText); console.log(res.players.get(col))">{{ res.players.get(col)}}</span></th>
+          <span v-if="res.players.has(col)" contenteditable="true" spellcheck="false" @blur="editPlayerNameCallback($event, col)">{{ res.players.get(col)}}</span></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="race of res.raceNames">
           <td class="race_name" spellcheck="false">{{ race }}</td>
-          <td class="race_points" contenteditable="true" v-for="col of res.getAllColors()" @blur="res.putResults(race, col, $event.target.innerText)">{{ res.getResult(race, col) }}</td>
+          <td class="race_points" contenteditable="true" v-for="col of res.getAllColors()" @blur="editResultsCallback($event, race, col)">{{ res.getResult(race, col) }}</td>
         </tr>
         <tr>
           <td class="sum">Total</td>
@@ -82,8 +104,8 @@ function exitChampScreen() {
         <tr>
           <td></td>
           <td style="text-align: center;" :colspan="res.getAllColors().length">
-            <button v-if="mode !== modes.ADDRACE" id="add_race_button" @click="addRaceCallback()">Add Race</button>
-            <div id="add_race_div" v-if="mode === modes.ADDRACE">
+            <button v-if="mode !== Modes.ADDRACE" id="add_race_button" @click="addRaceCallback()">Add Race</button>
+            <div id="add_race_div" v-if="mode === Modes.ADDRACE">
                 <label>Track: <select v-model="newRace">
                 <option v-for="track of res.getAvTracks()">{{ track }}</option>
                 </select></label>
@@ -94,14 +116,14 @@ function exitChampScreen() {
       </tbody>
     </table>
   </div>
-  <div id="add_player_div" v-if="mode === modes.ADDPLAYER">
-    <label>Player name: <input type="text" v-model="newPlayer.name"></label><br>
-    <label>Player color: <select v-model="newPlayer.color">
+  <div id="add_player_div" v-if="mode === Modes.ADDPLAYER">
+    <label>Player name: <input type="text" v-model="newPlayerName"></label><br>
+    <label>Player color: <select v-model="newPlayerColor">
       <option v-for="col of res.getAvColors()">{{ col }}</option>
     </select></label>
     <button @click="playerSubmitCallback()">Accept</button>
   </div>
-  <button id="save_champ_button" @click="saveChampResults(res)">Save results</button><button id="load_champ_button" @click="res = getChampResults()">Load results</button>
+  <button id="save_champ_button" @click="saveChampResults(res)">Save results</button><button id="load_champ_button" @click="loadChampResultsCallback()">Load results</button>
   <button id="exit_button" @click="exitChampScreen()">Exit</button>
 </template>
 <style>

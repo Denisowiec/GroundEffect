@@ -1,20 +1,20 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { getConfig, saveConfig } from './logic'
+import { getConfig, saveConfig, type Config, Results } from './logic'
 
-const modes = Object.freeze({
-    SETUP: 0,
-    CARDDISPLAY: 1,
-    SETUPSCREEN: 2,
-    CHAMPIONSHIPRESULTS: 3
-})
+enum Modes {
+    SETUP,
+    CARDDISPLAY,
+    SETUPSCREEN,
+    CHAMPIONSHIPRESULTS
+}
 
 // default config
-let config = {}
+let config: Config
 const loadedConfig = getConfig()
 if (loadedConfig == null) {
     config = {
-        colors: new Set(["black", "blue", "green", "grey", "red", "yellow"]),
+        colors: ["black", "blue", "green", "grey", "red", "yellow"],
         handicap: 0,
         ifHalfHandicap: false,
         ifRegenOnShuffle: false,
@@ -25,22 +25,22 @@ if (loadedConfig == null) {
 }
 
 // default championship results
-let champResults = null
+let champResults: Results | null = null
 
-const mode = ref(modes.SETUPSCREEN)
+const mode = ref(Modes.SETUPSCREEN)
 
-function newGame(receivedConfig) {
+function newGame(receivedConfig: Config) {
     config = receivedConfig
     saveConfig(config)
-    mode.value = modes.CARDDISPLAY
+    mode.value = Modes.CARDDISPLAY
 }
 function newSetup() {
-    mode.value = modes.SETUPSCREEN
+    mode.value = Modes.SETUPSCREEN
 }
-function backToGame(results) {
+function backToGame(results: Results) {
     console.log(results)
     champResults = results
-    mode.value = modes.CARDDISPLAY
+    mode.value = Modes.CARDDISPLAY
 }
 
 </script>
@@ -50,10 +50,10 @@ function backToGame(results) {
     <h1>GroundEffect</h1>
     <h3>Legends deck replacement</h3>
   </header>
-  <carddisplay v-if="mode === modes.CARDDISPLAY" :config="config" @back-to-setup="newSetup"/>
-  <setupscreen v-else-if="mode === modes.SETUPSCREEN" :config="config" @submit="newGame" />
-  <championshipresults v-else-if="mode === modes.CHAMPIONSHIPRESULTS" :config="config" :results="champResults" @exit="backToGame"/>
-  <button @click="mode = modes.CHAMPIONSHIPRESULTS" id="champ_results_button" v-if="mode !== modes.CHAMPIONSHIPRESULTS">Championship results</button>
+  <carddisplay v-if="mode === Modes.CARDDISPLAY" :config="config" @back-to-setup="newSetup"/>
+  <setupscreen v-else-if="mode === Modes.SETUPSCREEN" :config="config" @submit="newGame" />
+  <championshipresults v-else-if="mode === Modes.CHAMPIONSHIPRESULTS" :config="config" :results="champResults" @exit="backToGame"/>
+  <button @click="mode = Modes.CHAMPIONSHIPRESULTS" id="champ_results_button" v-if="mode !== Modes.CHAMPIONSHIPRESULTS">Championship results</button>
 </template>
 
 <style>

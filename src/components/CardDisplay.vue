@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { type Config, shuffle, generateDeck } from '@/logic.js'
 
-const props = defineProps({
-    config: Object
-})
+const props = defineProps<{
+    config: Config
+}>()
 const config = props.config
-import { shuffle, generateDeck } from '/src/logic.js'
 
-let deck = generateDeck(config.colors, config.ifStandardDeck)
+let deck = generateDeck(new Set(config.colors), config.ifStandardDeck)
 const currentCard = ref(0)
 
 function nextCard() {
@@ -15,24 +15,24 @@ function nextCard() {
     if (currentCard.value >= 10) {
         currentCard.value = 0
         if (config.ifRegenOnShuffle) {
-            deck = generateDeck(config.colors, config.ifStandardDeck)
+            deck = generateDeck(new Set(config.colors), config.ifStandardDeck)
         } else {
             shuffle(deck)
         }
     }
 }
 
-function calculateSpeed(speed) {
+function calculateSpeed(speed: number) {
     if (!config.ifHalfHandicap) {
-        return Number(speed) + Number(config.handicap)
+        return speed + config.handicap
     }
     if (Math.random() > 0.5) {
-        return Number(speed) + Number(config.handicap)
+        return speed + config.handicap
     }
     if (config.handicap > 0) {
-        return Number(speed) + Number(config.handicap) - 1
+        return speed + config.handicap - 1
     }
-    return Number(speed)
+    return speed
 }
 
 const emit = defineEmits(['backToSetup'])

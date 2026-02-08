@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { AllColors } from '@/logic'
+import { AllColors, type Config } from '@/logic'
 
-const props = defineProps({
-    config: Object
-})
+const props = defineProps<{
+    config: Config
+}>()
 const config = props.config
 
 const AllHandicaps = new Set([-1, 0, 1, 2, 3])
@@ -14,21 +14,21 @@ const ifRegenOnShuffle = ref(config.ifRegenOnShuffle)
 const handicap = ref(config.handicap)
 const ifHalfHandicap = ref(config.ifHalfHandicap)
 
-const selectedColors = new Object()
+const selectedColors = new Map<string, boolean>()
 for (const col of AllColors) {
-    selectedColors[col] = false
-    if (config.colors.has(col)) {
-        selectedColors[col] = true
+    selectedColors.set(col, false)
+    if (config.colors.includes(col)) {
+        selectedColors.set(col, true)
     }
 }
 
 const emit = defineEmits(['submit'])
 
 function submitSetup() {
-    const colors = new Set()
+    const colors: string[] = []
     for (const col of AllColors) {
-        if (selectedColors[col]) {
-            colors.add(col)
+        if (selectedColors.get(col)) {
+            colors.push(col)
         }
     }
     if (ifStandardDeck) {
@@ -69,7 +69,7 @@ function submitSetup() {
           <li class="color_selector_item" v-for="col in AllColors">
             <label>
             <img :src="'./assets/cars/' + col + '_car.png'" alt="col + ' car'">
-            <input type="checkbox" v-model="selectedColors[col]">
+            <input type="checkbox" :value="selectedColors.get(col)" @input="selectedColors.get(col)">
             </label>
           </li>
         </ul>
