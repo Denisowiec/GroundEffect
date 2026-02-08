@@ -163,7 +163,7 @@ export function generateDeck(colors: Set<string>, standard = false): Cardrow[][]
 // Functions related to preserving basic configuration in-browser
 export function saveConfig(config: Config) {
     const configToSave = {
-        colors: Array.from(config.colors),
+        colors: config.colors,
         handicap: config.handicap,
         if_half_handicap: config.ifHalfHandicap,
         if_regen_on_shuffle: config.ifRegenOnShuffle,
@@ -182,9 +182,9 @@ export function getConfig(): Config | null {
     const config: Config = {
         colors: Array.from(parsed.colors),
         handicap: Number(parsed.handicap),
-        ifHalfHandicap: parsed.if_half_handicap,
-        ifRegenOnShuffle: parsed.if_regen_on_shuffle,
-        ifStandardDeck: parsed.if_standard_deck
+        ifHalfHandicap: parsed.if_half_handicap as boolean,
+        ifRegenOnShuffle: parsed.if_regen_on_shuffle as boolean,
+        ifStandardDeck: parsed.if_standard_deck as boolean
     }
     return config
 }

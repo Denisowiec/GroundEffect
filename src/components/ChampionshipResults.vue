@@ -4,7 +4,7 @@ import { Results, type Config, saveChampResults, getChampResults } from '@/logic
 
 const props = defineProps<{
     config: Config,
-    results: Results
+    results: Results | null
 }>()
 
 enum Modes {

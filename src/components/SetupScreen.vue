@@ -14,31 +14,35 @@ const ifRegenOnShuffle = ref(config.ifRegenOnShuffle)
 const handicap = ref(config.handicap)
 const ifHalfHandicap = ref(config.ifHalfHandicap)
 
-const selectedColors = new Map<string, boolean>()
+const selectedColors: Record<string, boolean> = {}
 for (const col of AllColors) {
-    selectedColors.set(col, false)
+    selectedColors[col] = false
     if (config.colors.includes(col)) {
-        selectedColors.set(col, true)
+        selectedColors[col] = true
     }
 }
+const selCol = ref(selectedColors)
 
 const emit = defineEmits(['submit'])
 
 function submitSetup() {
     const colors: string[] = []
     for (const col of AllColors) {
-        if (selectedColors.get(col)) {
+        if (selCol.value[col]) {
             colors.push(col)
         }
     }
-    if (ifStandardDeck) {
+    if (ifStandardDeck.value) {
         ifRegenOnShuffle.value = false
     }
     config.ifStandardDeck = ifStandardDeck.value
-    config.ifRegenOnShuffle = ifStandardDeck.value
+    config.ifRegenOnShuffle = ifRegenOnShuffle.value
+    console.log("ref value: " + ifRegenOnShuffle.value + " config value: " + config.ifRegenOnShuffle)
     config.handicap = handicap.value
     config.ifHalfHandicap = ifHalfHandicap.value
     config.colors = colors
+    console.log("Config sent from setup screen:")
+    console.log(config)
     emit('submit', config)
 }
 
@@ -68,8 +72,8 @@ function submitSetup() {
         <ul id="color_list">
           <li class="color_selector_item" v-for="col in AllColors">
             <label>
-            <img :src="'./assets/cars/' + col + '_car.png'" alt="col + ' car'">
-            <input type="checkbox" :value="selectedColors.get(col)" @input="selectedColors.get(col)">
+            <img :src="'./assets/cars/' + col + '_car.png'" :alt="'col' + ' car'">
+            <input type="checkbox" :id="'checkbox-' + col" v-model="selCol[col]">
             </label>
           </li>
         </ul>

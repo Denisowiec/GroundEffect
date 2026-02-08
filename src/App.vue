@@ -12,7 +12,9 @@ enum Modes {
 // default config
 let config: Config
 const loadedConfig = getConfig()
-if (loadedConfig == null) {
+console.log("Loaded config:")
+console.log(loadedConfig)
+if (loadedConfig === null) {
     config = {
         colors: ["black", "blue", "green", "grey", "red", "yellow"],
         handicap: 0,
@@ -30,6 +32,8 @@ let champResults: Results | null = null
 const mode = ref(Modes.SETUPSCREEN)
 
 function newGame(receivedConfig: Config) {
+    console.log("Received config from setup screen:")
+    console.log(receivedConfig)
     config = receivedConfig
     saveConfig(config)
     mode.value = Modes.CARDDISPLAY
@@ -38,7 +42,6 @@ function newSetup() {
     mode.value = Modes.SETUPSCREEN
 }
 function backToGame(results: Results) {
-    console.log(results)
     champResults = results
     mode.value = Modes.CARDDISPLAY
 }
