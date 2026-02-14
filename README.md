@@ -1,6 +1,6 @@
 # GroundEffect
 
-## A digital "legends" deck replacement for *Heat: Pedal to the Metal*
+**A digital "legends" deck replacement for *Heat: Pedal to the Metal***
 
 This is a helper-app for playing the board game *Heat: Pedal to the Metal*, themed around old-school formula racing, released by Days of Wonder in 2022. The original game provides a "legends" deck - a simple but effective way to introduce additional cars into the race that are not player-controlled. Unfortunately the deck was never updated for the addtional car colors introduced in the expansions, and only supports the 6 cars from the original edition. This app is meant to alleviate this problem while providing some other features.
 
@@ -21,3 +21,9 @@ The app is written in typescript and uses the Vue 3 framework without any additi
 ### Other stuff
 
 This is a fan-made thing. I have no affiliation with Days of Wonder. The title of the game and the name of DoW is used for informational purposes. The app itself doesn't use any copyrighted artwork.
+
+### Features planned
+
+A planned feature for the app is a championship-campaign generator. It will create championships similar to the ones available in the game itself, but they could be of any length and include any or all of the tracks. For longer campaigns the app could gradually increase tha handicap for the legends, in order to offset the human players acquiring additional upgrades.
+
+There should also be an ability to save track multiple championship results in browser storage, not just one.
