@@ -1,38 +1,23 @@
-# .
+# GroundEffect
 
-This template should help get you started developing with Vue 3 in Vite.
+## A digital "legends" deck replacement for *Heat: Pedal to the Metal*
 
-## Recommended IDE Setup
+This is a helper-app for playing the board game *Heat: Pedal to the Metal*, themed around old-school formula racing, released by Days of Wonder in 2022. The original game provides a "legends" deck - a simple but effective way to introduce additional cars into the race that are not player-controlled. Unfortunately the deck was never updated for the addtional car colors introduced in the expansions, and only supports the 6 cars from the original edition. This app is meant to alleviate this problem while providing some other features.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### How it works
 
-## Recommended Browser Setup
+The app can generate a 10-card deck for an arbitrary number of cars between 1-10 (although only 9 cars are currently available for the game). The original deck is also hardcoded and available if you check the "use standard deck option".
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+Instead of reshuffling the same deck over and over, the app can generate a new deck on every reshuffle, which should make the legends a bit more unpredictable.
 
-## Customize configuration
+You can choose a handicap - an additional value that will be added to the speed values on the cards to make the game more difficult. There's also an option to only add it half the time (based on an RNG) which is meant to provide intermediate diffculty levels.
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+In addition to that, the app also has a simplistic built-in tool to record championship results. These are stored in your browser storage, along with the last used configuration options, so it persists if you close or reload the page (unless you use the browsers private mode).
 
-## Project Setup
+### Technical info
 
-```sh
-npm install
-```
+The app is written in typescript and uses the Vue 3 framework without any additional modules. It's developed as a learning excercise, without the use of generative AI and is my first ever JS-based project and my first web app.
 
-### Compile and Hot-Reload for Development
+### Other stuff
 
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+This is a fan-made thing. I have no affiliation with Days of Wonder. The title of the game and the name of DoW is used for informational purposes. The app itself doesn't use any copyrighted artwork.
