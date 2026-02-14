@@ -77,7 +77,7 @@ function submitSetup() {
         </ul>
       </span>
     </form>
-    <button id="button-accept" @click="submitSetup">Accept</button>
+    <button id="button-accept" @click="submitSetup">Save config</button>
   </div>
 
 </template>

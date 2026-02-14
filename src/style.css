@@ -38,18 +38,59 @@
 html {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   background-color:  var(--green-xlight);
+  margin: 0;
+  padding: 0;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+main {
+  margin: 0;
+  padding: 0;
+  position: static;
 }
 header {
-  text-align: center;
+  position: relative;
+  text-align: left;
+  margin: 0;
+  padding: 5px 10px;
   color: var(--orange-vdark);
-  text-shadow: 2px 2px var(--orange-vlight), -2px -2px var(--orange-vlight), -2px 2px var(--orange-vlight), 2px -2px var(--orange-vvlight);
-}
-h1 {
+  background-color: var(--green-xlight);
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   font-size: xx-large;
+  text-shadow: 2px 2px var(--orange-vlight), -2px -2px var(--orange-vlight), -2px 2px var(--orange-vlight), 2px -2px var(--orange-vvlight);
 }
 #champ-results-button {
   float: right;
+}
+
+/* Navbar */
+nav {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background-color: var(--orange-light);
+  position: sticky;
+}
+.nav-bar {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  background-color: var(--orange-light);
+  display: flex;
+}
+.nav-item {
+  position: relative;
+  float: left;
+}
+.nav-button {
+  background-color: var(--orange-vdark);
+  border-radius: 0;
+  border-left: 3px solid var(--orange-light);
+}
+.nav-button:hover {
+  background-color: var(--orange-dark);
 }
 
 /* Forms */
@@ -82,7 +123,9 @@ select {
 
 /* Setup screen specific */
 #setup_div {
+  position: relative;
   margin: auto;
+  padding: 10px 0px;
   max-width: 500px;
 }
 .color_selector_item {

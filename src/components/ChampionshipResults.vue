@@ -88,7 +88,7 @@ function exitChampScreen() {
       <thead>
         <tr>
           <th class="champ-table-header-cell"><button v-if="mode !== Modes.ADDPLAYER" id="add-player-button" @click="addPlayerCallback()">Add player</button></th>
-          <th class="champ-table-header-cell" v-for="col of res.getAllColors()"><img :src="'./assets/cars/' + col + '_car.png'" :alt="col + ' car'"><br>
+          <th class="champ-table-header-cell" v-for="col of res.getAllColors()"><img style="width: 80px" :src="'./assets/cars/' + col + '_car.png'" :alt="col + ' car'"><br>
           <span v-if="res.players.has(col)" contenteditable="true" spellcheck="false" @blur="editPlayerNameCallback($event, col)">{{ res.players.get(col)}}</span></th>
         </tr>
       </thead>
@@ -124,5 +124,4 @@ function exitChampScreen() {
     <button @click="playerSubmitCallback()">Accept</button>
   </div>
   <button id="save-champ-button" @click="saveChampResults(res)">Save results</button><button id="load-champ-button" @click="loadChampResultsCallback()">Load results</button>
-  <button id="exit-button" @click="exitChampScreen()">Exit</button>
 </template>

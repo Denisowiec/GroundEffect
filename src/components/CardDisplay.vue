@@ -35,8 +35,6 @@ function calculateSpeed(speed: number) {
     return speed
 }
 
-const emit = defineEmits(['backToSetup'])
-
 </script>
 <template>
   <div id="card">
@@ -61,5 +59,4 @@ const emit = defineEmits(['backToSetup'])
     <span id="card-counter">{{ (currentCard + 1) + " / 10" }}</span>
     <button id="button-next" @:click="nextCard()">Next card</button>
   </div>
-  <button id="button-backtosetup" @click="$emit('backToSetup')">Setup screen...</button>
 </template>

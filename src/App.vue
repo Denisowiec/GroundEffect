@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import { getConfig, saveConfig, type Config, Results } from './logic'
 
 enum Modes {
-    SETUP,
     CARDDISPLAY,
     SETUPSCREEN,
     CHAMPIONSHIPRESULTS
@@ -42,16 +41,35 @@ function backToGame(results: Results) {
     mode.value = Modes.CARDDISPLAY
 }
 
+// navbar callback functions
+function setupButtonCallback() {
+    mode.value = Modes.SETUPSCREEN
+}
+
+function cardButtonCallback() {
+    mode.value = Modes.CARDDISPLAY
+}
+function champButtonCallback() {
+    mode.value = Modes.CHAMPIONSHIPRESULTS
+}
+
 </script>
 
 <template>
   <header>
-    <h1>GroundEffect</h1>
-    <h3>Legends deck replacement</h3>
+    <span>GroundEffect</span>
   </header>
-  <carddisplay v-if="mode === Modes.CARDDISPLAY" :config="config" @back-to-setup="newSetup"/>
-  <setupscreen v-else-if="mode === Modes.SETUPSCREEN" :config="config" @submit="newGame" />
-  <championshipresults v-else-if="mode === Modes.CHAMPIONSHIPRESULTS" :config="config" :results="champResults" @exit="backToGame"/>
-  <button @click="mode = Modes.CHAMPIONSHIPRESULTS" id="champ-results-button" v-if="mode !== Modes.CHAMPIONSHIPRESULTS">Championship results</button>
+  <nav>
+    <ul class="nav-bar">
+      <li class="nav-item"><button :style="[mode === Modes.SETUPSCREEN ? 'font-weight: bold' : 'font-weight: normal']" @click="setupButtonCallback" class="nav-button">Setup</button></li>
+      <li class="nav-item"><button :style="[mode === Modes.CARDDISPLAY ? 'font-weight: bold' : 'font-weight: normal']" @click="cardButtonCallback" class="nav-button">Card</button></li>
+      <li class="nav-item"><button :style="[mode === Modes.CHAMPIONSHIPRESULTS ? 'font-weight: bold' : 'font-weight: normal']" @click="champButtonCallback" class="nav-button">Results</button></li>
+    </ul>
+  </nav>
+  <main>
+    <carddisplay v-if="mode === Modes.CARDDISPLAY" :config="config" @back-to-setup="newSetup"/>
+    <setupscreen v-else-if="mode === Modes.SETUPSCREEN" :config="config" @submit="newGame" />
+    <championshipresults v-else-if="mode === Modes.CHAMPIONSHIPRESULTS" :config="config" :results="champResults" @exit="backToGame"/>
+  </main>
 </template>
 
