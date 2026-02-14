@@ -1,0 +1,204 @@
+/*
+  Generated via Harmonizer: https://harmonizer.evilmartians.com/#fZHNTsMwEITfZXq1kJP018cWwQXEoRUXxMGkG9fCtYPjREhV3x0losRWUX2cWX-eHZ_QkW-0sxAZg6GOTAPxdoKVR4LAt9HqEMBQOhu8bAJExhnKg3dHCcHveLGY8fjML-5G1hC2NebM_nBdd80rEl7GiyyPiNNbuGvYLIXNl0m6m7C99J8Ja5Gyitkq3jW_uecVbJW2tkqT_QN7Zzi0lHzGg5FHbZUDg7TKEASP3nzx0ioavXlsPnoiO3pZHpu71n-1TjfR5WwZD6xNG3n5NPZetTMURrfgvM_eUAjaqgbi9NfCs9uTgYCsSwmGvfZUBu1sr0OgUju3VrhU8atSNwT_UBtnnH8aflxgUlXVqN73bQtMOOeDOExtg_QBou-9n9nWsux5dYHz-Qc
+*/
+:root {
+  --flamingo-xlight: oklch(0.94 0.04 0);
+  --flamingo-vlight: oklch(0.84 0.1 0);
+  --flamingo-light: oklch(0.73 0.17 0);
+  --flamingo-dark: oklch(0.59 0.14 0);
+  --flamingo-vdark: oklch(0.42 0.1 0);
+  --orange-xlight: oklch(0.94 0.04 60);
+  --orange-vlight: oklch(0.84 0.1 60);
+  --orange-light: oklch(0.72 0.17 60);
+  --orange-dark: oklch(0.58 0.14 60);
+  --orange-vdark: oklch(0.42 0.1 60);
+  --green-xlight: oklch(0.93 0.04 120);
+  --green-vlight: oklch(0.82 0.1 120);
+  --green-light: oklch(0.7 0.17 120);
+  --green-dark: oklch(0.57 0.14 120);
+  --green-vdark: oklch(0.41 0.1 120);
+  --turquoise-xlight: oklch(0.93 0.04 180);
+  --turquoise-vlight: oklch(0.82 0.1 180);
+  --turquoise-light: oklch(0.69 0.17 180);
+  --turquoise-dark: oklch(0.56 0.14 180);
+  --turquoise-vdark: oklch(0.39 0.1 180);
+  --blue-xlight: oklch(0.93 0.04 240);
+  --blue-vlight: oklch(0.83 0.1 240);
+  --blue-light: oklch(0.7 0.17 240);
+  --blue-dark: oklch(0.57 0.14 240);
+  --blue-vdark: oklch(0.41 0.1 240);
+  --violet-xlight: oklch(0.94 0.04 300);
+  --violet-vlight: oklch(0.84 0.1 300);
+  --violet-light: oklch(0.73 0.17 300);
+  --violet-dark: oklch(0.59 0.14 300);
+  --violet-vdark: oklch(0.42 0.1 300);
+}
+
+/* General stuff */
+html {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color:  var(--green-xlight);
+}
+header {
+  text-align: center;
+  color: var(--orange-vdark);
+  text-shadow: 2px 2px var(--orange-vlight), -2px -2px var(--orange-vlight), -2px 2px var(--orange-vlight), 2px -2px var(--orange-vvlight);
+}
+h1 {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: xx-large;
+}
+#champ-results-button {
+  float: right;
+}
+
+/* Forms */
+button {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-align: center;
+  font-size: large;
+  color: var(--turquoise-xlight);
+  background-color: var(--turquoise-vdark);
+  border: 0px;
+  border-radius: 5px;
+  padding: 3px 10px;
+}
+button:hover {
+  background-color: var(--turquoise-dark);
+}
+
+select {
+  padding: 5px 5px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: small;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  color: var(--violet-dark);
+
+}
+
+/* Setup screen specific */
+#setup_div {
+  margin: auto;
+  max-width: 500px;
+}
+.color_selector_item {
+  padding: 5px;
+  margin: 0px;
+}
+.car-image {
+  margin: 0;
+  padding: 0;
+}
+.checkbox-car {
+  position: relative;
+  bottom: 16px;
+  margin-right: 16px;
+  width: 32px;
+  height: 32px;
+}
+#color-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#button-accept {
+  position: relative;
+  float: right;
+}
+
+/* Card display specific */
+
+#card {
+  max-width: 600px;
+  margin: auto;
+}
+.card-table {
+  margin: auto;
+}
+.card-table-cell {
+  text-align: center;
+  font-size: xx-large;
+  font-weight: bolder;
+  color: black;
+  text-shadow: 0px 0px 3px var(--orange-vdark);
+  margin: 0;
+  padding: 5px;
+}
+.card-table-header-cell {
+  text-align: center;
+  font-size: large;
+  border-bottom: 1px solid black;
+  padding: 10px;
+  margin: 0;
+}
+.card-footer {
+  border-top: 1px solid black;
+  margin: auto;
+  padding: 5px;
+  max-width: 320px;
+}
+#card-counter {
+  position: relative;
+  float: left;
+  color: black;
+  text-shadow: 0px 0px 3px var(--orange-vdark);
+  padding: 5px;
+  font-size: x-large;
+  font-weight: bolder;
+}
+#button-next {
+  position: relative;
+  font-size: x-large;
+  float: right;
+}
+#button-backtosetup {
+  float:right;
+  position: relative;
+}
+
+/* Championship results specific */
+
+#championship-div {
+  margin: auto;
+}
+#championship-table {
+  margin: auto;
+}
+.champ-table-header-cell {
+  color: black;
+  border-bottom: 1px solid black;
+  text-align: center;
+  font-size: large;
+  padding: 5px;
+}
+.race-name {
+  text-align: left;
+  color: black;
+  font-size: x-large;
+  padding: 0px 5px;
+}
+.race-points {
+  text-align: center;
+  color: black;
+  font-weight: bold;
+  font-size: large;
+}
+.total-points {
+  border-top: 1px solid black;
+  text-align: center;
+  color: black;
+  font-size: xx-large;
+  font-weight: bolder;
+}
+.total-points-name {
+  border-top: 1px solid black;
+  text-align: left;
+  color: black;
+  font-size: xx-large;
+  font-weight: bolder;
+}

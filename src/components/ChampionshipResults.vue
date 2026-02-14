@@ -83,29 +83,29 @@ function exitChampScreen() {
 }
 </script>
 <template>
-  <div id="championship_div">
-    <table id="championship_table">
+  <div id="championship-div">
+    <table id="championship-table">
       <thead>
         <tr>
-          <th><button v-if="mode !== Modes.ADDPLAYER" id="add_player_button" @click="addPlayerCallback()">Add player</button></th>
-          <th v-for="col of res.getAllColors()"><img :src="'./assets/cars/' + col + '_car.png'" :alt="col + ' car'"><br>
+          <th class="champ-table-header-cell"><button v-if="mode !== Modes.ADDPLAYER" id="add-player-button" @click="addPlayerCallback()">Add player</button></th>
+          <th class="champ-table-header-cell" v-for="col of res.getAllColors()"><img :src="'./assets/cars/' + col + '_car.png'" :alt="col + ' car'"><br>
           <span v-if="res.players.has(col)" contenteditable="true" spellcheck="false" @blur="editPlayerNameCallback($event, col)">{{ res.players.get(col)}}</span></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="race of res.raceNames">
-          <td class="race_name" spellcheck="false">{{ race }}</td>
-          <td class="race_points" contenteditable="true" v-for="col of res.getAllColors()" @blur="editResultsCallback($event, race, col)">{{ res.getResult(race, col) }}</td>
+          <td class="race-name" spellcheck="false">{{ race }}</td>
+          <td class="race-points" contenteditable="true" v-for="col of res.getAllColors()" @blur="editResultsCallback($event, race, col)">{{ res.getResult(race, col) }}</td>
         </tr>
         <tr>
-          <td class="sum">Total</td>
-          <td class="total_points" v-for="col of res.getAllColors()">{{ res.sumResults(col) }}</td>
+          <td class="total-points-name">Total</td>
+          <td class="total-points" v-for="col of res.getAllColors()">{{ res.sumResults(col) }}</td>
         </tr>
         <tr>
           <td></td>
           <td style="text-align: center;" :colspan="res.getAllColors().length">
-            <button v-if="mode !== Modes.ADDRACE" id="add_race_button" @click="addRaceCallback()">Add Race</button>
-            <div id="add_race_div" v-if="mode === Modes.ADDRACE">
+            <button v-if="mode !== Modes.ADDRACE" id="add-race-button" @click="addRaceCallback()">Add Race</button>
+            <div id="add-race-div" v-if="mode === Modes.ADDRACE">
                 <label>Track: <select v-model="newRace">
                 <option v-for="track of res.getAvTracks()">{{ track }}</option>
                 </select></label>
@@ -116,49 +116,13 @@ function exitChampScreen() {
       </tbody>
     </table>
   </div>
-  <div id="add_player_div" v-if="mode === Modes.ADDPLAYER">
+  <div id="add-player-div" v-if="mode === Modes.ADDPLAYER">
     <label>Player name: <input type="text" v-model="newPlayerName"></label><br>
     <label>Player color: <select v-model="newPlayerColor">
       <option v-for="col of res.getAvColors()">{{ col }}</option>
     </select></label>
     <button @click="playerSubmitCallback()">Accept</button>
   </div>
-  <button id="save_champ_button" @click="saveChampResults(res)">Save results</button><button id="load_champ_button" @click="loadChampResultsCallback()">Load results</button>
-  <button id="exit_button" @click="exitChampScreen()">Exit</button>
+  <button id="save-champ-button" @click="saveChampResults(res)">Save results</button><button id="load-champ-button" @click="loadChampResultsCallback()">Load results</button>
+  <button id="exit-button" @click="exitChampScreen()">Exit</button>
 </template>
-<style>
-#championship_div {
-    width: auto;
-    background-color: bisque;
-    margin: auto;
-    border-radius: 10px;
-}
-#championship_table {
-    margin: auto;
-    font-weight: bold;
-    padding: 10px;
-}
-.race_name {
-    text-align: right;
-    font-size: x-large;
-}
-.race_points {
-    text-align: center;
-    font-size: x-large;
-    padding: 5px;
-}
-.sum {
-    border-top: 1px solid black;
-    text-align: right;
-    font-size: xx-large;
-}
-.total_points {
-    border-top: 1px solid black;
-    text-align: center;
-    font-size: xx-large;
-    padding: 5px;
-}
-#exit_button {
-    float: right;
-}
-</style>

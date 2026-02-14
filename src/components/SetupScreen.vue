@@ -37,12 +37,9 @@ function submitSetup() {
     }
     config.ifStandardDeck = ifStandardDeck.value
     config.ifRegenOnShuffle = ifRegenOnShuffle.value
-    console.log("ref value: " + ifRegenOnShuffle.value + " config value: " + config.ifRegenOnShuffle)
     config.handicap = handicap.value
     config.ifHalfHandicap = ifHalfHandicap.value
     config.colors = colors
-    console.log("Config sent from setup screen:")
-    console.log(config)
     emit('submit', config)
 }
 
@@ -52,41 +49,35 @@ function submitSetup() {
     <form id="setup_form">
       <span id="general_options">
         <label>
-          <input type="checkbox" v-model="ifStandardDeck" id="standard_deck">
+          <input type="checkbox" class="checkbox" v-model="ifStandardDeck" id="standard_deck">
           Use standard deck?
         </label><br>
         <label v-if="!ifStandardDeck">
-          <input type="checkbox" v-model="ifRegenOnShuffle" id="regen_on_shuffle">
+          <input type="checkbox" class="checkbox" v-model="ifRegenOnShuffle" id="regen_on_shuffle">
           Generate a new deck instead of shuffling?
         </label><br>
         <label>Difficulty handicap:</label>
         <select id="handicap_selector" v-model="handicap">
           <option v-for="hc in AllHandicaps">{{ hc }}</option>
-        </select>
+        </select><br>
         <label v-if="handicap != 0">
-          <input type="checkbox" v-model="ifHalfHandicap" id="half_handicap">
+          <input type="checkbox" class="checkbox" v-model="ifHalfHandicap" id="half_handicap">
           Apply handicap value only half the time?
         </label>
       </span>
       <span v-if="!ifStandardDeck" id="color_selector">
-        <ul id="color_list">
+        <p>Choose car colors that should be included in the deck:</p>
+        <ul id="color-list">
           <li class="color_selector_item" v-for="col in AllColors">
             <label>
-            <img :src="'./assets/cars/' + col + '_car.png'" :alt="'col' + ' car'">
-            <input type="checkbox" :id="'checkbox-' + col" v-model="selCol[col]">
+            <input type="checkbox" class="checkbox-car" :id="'checkbox-' + col" v-model="selCol[col]">
+            <img class="car-image" :src="'./assets/cars/' + col + '_car.png'" :alt="'col' + ' car'">
             </label>
           </li>
         </ul>
       </span>
     </form>
-    <button id="button_accept" @click="submitSetup">Accept</button>
+    <button id="button-accept" @click="submitSetup">Accept</button>
   </div>
 
 </template>
-<style>
-#setup_div {
-    margin: auto
-
-}
-
-</style>
