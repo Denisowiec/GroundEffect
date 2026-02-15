@@ -125,7 +125,7 @@ select {
 #setup_div {
   position: relative;
   margin: auto;
-  padding: 10px 0px;
+  padding: 10px 10px;
   max-width: 500px;
 }
 .color_selector_item {
@@ -244,4 +244,32 @@ select {
   color: black;
   font-size: xx-large;
   font-weight: bolder;
+}
+.image-bin {
+  width: 16px;
+  height: 21px;
+}
+.edit-button {
+  font-size: small;
+  font-weight: bolder;
+  margin-bottom: 5px;
+  border-radius: 15px;
+  padding: 2px 8px;
+}
+.point-input {
+  max-width: 50px;
+  margin: 0;
+  padding: 1px;
+  font-size: medium;
+  font-weight: bold;
+  text-align: center;
+}
+.name-input {
+  max-width: 80px;
+  margin: 0;
+  padding: 1px;
+  font-size: medium;
+  font-weight: bold;
+  text-align: center;
+
 }

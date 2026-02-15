@@ -31,6 +31,7 @@ if (props.results != null) {
 const newPlayerName = ref<string | null>(null)
 const newPlayerColor = ref<string | null>(null)
 const newRace = ref("")
+const editMode = ref(false)
 
 function addPlayerCallback() {
     newPlayerName.value = null
@@ -56,15 +57,12 @@ function addRaceSubmitCallback() {
     mode.value = Modes.NORMAL
 }
 
-function editPlayerNameCallback(event: Event, color: string) {
-    let target = event.target as HTMLElement
-    let text = target.innerText
-    res.value.editPlayerName(color, text.trim())
+function editPlayerNameCallback(content: string, color: string) {
+    let text = content.trim()
+    res.value.editPlayerName(color, text)
 }
 
-function editResultsCallback(event: Event, raceName: string, color: string) {
-    let target = event.target as HTMLElement
-    let content = target.innerText.trim()
+function editResultsCallback(content: string, raceName: string, color: string) {
     let number = parseInt(content)
     res.value.putResults(raceName, color, number)
 }
@@ -76,6 +74,10 @@ function loadChampResultsCallback() {
     }
 }
 
+function resetChampResults() {
+    res.value = new Results(Array.from(props.config.colors))
+}
+
 const emit = defineEmits(['exit'])
 
 function exitChampScreen() {
@@ -84,18 +86,19 @@ function exitChampScreen() {
 </script>
 <template>
   <div id="championship-div">
+    <label style="float:left;position: absolute;"><input class="checkbox" v-model="editMode" type="checkbox">Edit mode</label>
     <table id="championship-table">
       <thead>
         <tr>
-          <th class="champ-table-header-cell"><button v-if="mode !== Modes.ADDPLAYER" id="add-player-button" @click="addPlayerCallback()">Add player</button></th>
-          <th class="champ-table-header-cell" v-for="col of res.getAllColors()"><img style="width: 80px" :src="'./assets/cars/' + col + '_car.png'" :alt="col + ' car'"><br>
-          <span v-if="res.players.has(col)" contenteditable="true" spellcheck="false" @blur="editPlayerNameCallback($event, col)">{{ res.players.get(col)}}</span></th>
+          <th class="champ-table-header-cell" style="text-align:right"><button class="edit-button" v-if="mode !== Modes.ADDPLAYER && editMode" id="add-player-button" @click="addPlayerCallback()">+player</button></th>
+          <th class="champ-table-header-cell" v-for="col of res.getAllColors()"><button class="edit-button" v-if="res.players.has(col) && editMode" @click="res.removePlayer(col)">-</button><br><img style="width: 80px" :src="'./assets/cars/' + col + '_car.png'" :alt="col + ' car'"><br>
+          <span v-if="res.players.has(col) && !editMode">{{ res.players.get(col)}}</span><input class="name-input" v-if="res.players.has(col) && editMode" :value="res.players.get(col)" @input.lazy="editPlayerNameCallback(($event.target as HTMLInputElement).value, col)"></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="race of res.raceNames">
-          <td class="race-name" spellcheck="false">{{ race }}</td>
-          <td class="race-points" contenteditable="true" v-for="col of res.getAllColors()" @blur="editResultsCallback($event, race, col)">{{ res.getResult(race, col) }}</td>
+          <td class="race-name"><button class="edit-button" v-if="editMode" @click="res.removeRace(race)">-</button>{{ race }}</td>
+          <td class="race-points" v-for="col of res.getAllColors()"><span v-if="!editMode">{{ res.getResult(race, col) }}</span><input class="point-input" type="number" maxlength="2" :value="String(res.getResult(race,col))" @input.lazy="editResultsCallback(($event.target as HTMLInputElement).value, race, col)" v-show="editMode"></td>
         </tr>
         <tr>
           <td class="total-points-name">Total</td>
@@ -104,7 +107,7 @@ function exitChampScreen() {
         <tr>
           <td></td>
           <td style="text-align: center;" :colspan="res.getAllColors().length">
-            <button v-if="mode !== Modes.ADDRACE" id="add-race-button" @click="addRaceCallback()">Add Race</button>
+            <button class="edit-button" v-if="mode !== Modes.ADDRACE && editMode" id="add-race-button" @click="addRaceCallback()">+race</button>
             <div id="add-race-div" v-if="mode === Modes.ADDRACE">
                 <label>Track: <select v-model="newRace">
                 <option v-for="track of res.getAvTracks()">{{ track }}</option>
@@ -123,5 +126,5 @@ function exitChampScreen() {
     </select></label>
     <button @click="playerSubmitCallback()">Accept</button>
   </div>
-  <button id="save-champ-button" @click="saveChampResults(res)">Save results</button><button id="load-champ-button" @click="loadChampResultsCallback()">Load results</button>
+  <button id="reset-champ-button" @click="resetChampResults()">Reset results</button> <button id="save-champ-button" @click="saveChampResults(res)">Save results</button> <button id="load-champ-button" @click="loadChampResultsCallback()">Load results</button>
 </template>
