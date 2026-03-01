@@ -37,7 +37,7 @@
 /* General stuff */
 html {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  background-color:  var(--green-xlight);
+  background-color:  var(--orange-xlight);
   margin: 0;
   padding: 0;
 }
@@ -56,13 +56,64 @@ header {
   margin: 0;
   padding: 5px 10px;
   color: var(--orange-vdark);
-  background-color: var(--green-xlight);
+  background-color: var(--orange-xlight);
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   font-size: xx-large;
   text-shadow: 2px 2px var(--orange-vlight), -2px -2px var(--orange-vlight), -2px 2px var(--orange-vlight), 2px -2px var(--orange-vvlight);
 }
 #champ-results-button {
   float: right;
+}
+/* custom checkbox */
+.checkbox-container {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 23px;
+  width: 23px;
+  background-color: var(--green-vlight);
+}
+.checkbox-container:hover input ~ .checkmark {
+  background-color: var(--green-light);
+}
+.checkbox-container input:checked ~ .checkmark{
+  background-color: var(--turquoise-vdark);
+}
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-container .checkmark:after {
+  left:8px;
+  top: 3px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--turquoise-vlight);
+  border-width: 0 2px 4px 0;
+  -webkit-transform: rotate(40deg);
+  -ms-transform: rotate(40deg);
+  transform: rotate(40deg);
 }
 
 /* Navbar */
@@ -152,6 +203,57 @@ select {
 #button-accept {
   position: relative;
   float: right;
+}
+/* specific custom checkbox for car color selection */
+.checkbox-car-container {
+  display: block;
+  position: relative;
+  padding-left: 44px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.checkbox-car-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.checkmark-car {
+  position: absolute;
+  top: 13px;
+  left: 0;
+  height: 33px;
+  width: 33px;
+  background-color: var(--green-vlight);
+}
+.checkbox-car-container:hover input ~ .checkmark-car {
+  background-color: var(--green-light);
+}
+.checkbox-car-container input:checked ~ .checkmark-car {
+  background-color: var(--turquoise-vdark);
+}
+.checkmark-car:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.checkbox-car-container input:checked ~ .checkmark-car:after {
+  display: block;
+}
+
+.checkbox-car-container .checkmark-car:after {
+  left:10px;
+  top: 3px;
+  width: 10px;
+  height: 15px;
+  border: solid var(--turquoise-vlight);
+  border-width: 0 2px 4px 0;
+  -webkit-transform: rotate(40deg);
+  -ms-transform: rotate(40deg);
+  transform: rotate(40deg);
 }
 
 /* Card display specific */
@@ -272,4 +374,7 @@ select {
   font-weight: bold;
   text-align: center;
 
+}
+.slot-selector {
+  float:right;
 }

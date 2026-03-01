@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { Results, type Config, saveChampResults, getChampResults } from '@/logic'
+import { Results, type Config, saveChampResults, getChampResults, maxSlots} from '@/logic'
 
 const props = defineProps<{
     config: Config,
@@ -20,18 +20,20 @@ const mode = ref(Modes.NORMAL)
 const res = ref(new Results(Array.from(props.config.colors)))
 if (props.results != null) {
     res.value = props.results
-} else {
+}/* else {
     const loadedRes = getChampResults()
     if (loadedRes != null) {
         res.value = loadedRes
     }
-}
+}*/
 
 // Reactive values for the modal dialogs
 const newPlayerName = ref<string | null>(null)
 const newPlayerColor = ref<string | null>(null)
 const newRace = ref("")
 const editMode = ref(false)
+
+const selectedSlot = ref(1)
 
 function addPlayerCallback() {
     newPlayerName.value = null
@@ -68,17 +70,21 @@ function editResultsCallback(content: string, raceName: string, color: string) {
 }
 
 function loadChampResultsCallback() {
-    let loadedResults = getChampResults()
+    let loadedResults = getChampResults(selectedSlot.value)
     if (loadedResults !== null) {
         res.value = loadedResults
     }
+    emit('loaded', res.value.botColors)
+}
+function saveChampResultsCallback() {
+    saveChampResults(res.value, selectedSlot.value)
 }
 
 function resetChampResults() {
     res.value = new Results(Array.from(props.config.colors))
 }
 
-const emit = defineEmits(['exit'])
+const emit = defineEmits(['exit', 'loaded'])
 
 function exitChampScreen() {
     emit('exit', res.value)
@@ -87,6 +93,7 @@ function exitChampScreen() {
 <template>
   <div id="championship-div">
     <label style="float:left;position: absolute;"><input class="checkbox" v-model="editMode" type="checkbox">Edit mode</label>
+    <span class="slot-selector">Save slot:<select v-model="selectedSlot"><option v-for="num in maxSlots">{{ num }}</option></select></span>
     <table id="championship-table">
       <thead>
         <tr>
@@ -126,5 +133,5 @@ function exitChampScreen() {
     </select></label>
     <button @click="playerSubmitCallback()">Accept</button>
   </div>
-  <button id="reset-champ-button" @click="resetChampResults()">Reset results</button> <button id="save-champ-button" @click="saveChampResults(res)">Save results</button> <button id="load-champ-button" @click="loadChampResultsCallback()">Load results</button>
+  <button id="reset-champ-button" @click="resetChampResults()">Reset results</button> <button id="save-champ-button" @click="saveChampResultsCallback()">Save results</button> <button id="load-champ-button" @click="loadChampResultsCallback()">Load results</button>
 </template>

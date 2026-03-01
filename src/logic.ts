@@ -1,5 +1,8 @@
 export const AllColors = new Set(["black", "blue", "green", "grey", "red", "yellow", "orange", "purple",])
+export const StdColors = new Set(["black", "blue", "green", "grey", "red", "yellow"])
 export const AllTracks = new Set(["Great Britain", "France", "Italia", "USA", "Japan", "Mexico", "Netherlands", "Spain", "Germany", "South Africa"])
+
+export const maxSlots = 9
 
 type Cardrow = {
     color: string,
@@ -327,7 +330,10 @@ export class Results {
     }
 }
 
-export function saveChampResults(res: Results) {
+export function saveChampResults(res: Results, slot: number) {
+    if (slot > maxSlots) {
+        throw "slot out of range"
+    }
     const objectifiedResults = []
     for (let r of res.results) {
         objectifiedResults.push(Object.fromEntries(r))
@@ -338,11 +344,14 @@ export function saveChampResults(res: Results) {
         race_names: res.raceNames,
         results: objectifiedResults
     }
-    localStorage.setItem('championship_results', JSON.stringify(resToSave))
+    localStorage.setItem('championship_results' + slot, JSON.stringify(resToSave))
 }
 
-export function getChampResults(): Results | null {
-    const data = localStorage.getItem('championship_results')
+export function getChampResults(slot: number): Results | null {
+    if (slot > maxSlots) {
+        throw "slot out of range"
+    }
+    const data = localStorage.getItem('championship_results' + slot)
     if (data == null) {
         return null
     }

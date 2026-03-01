@@ -41,6 +41,11 @@ function backToGame(results: Results) {
     mode.value = Modes.CARDDISPLAY
 }
 
+// Championship results event callbacks
+function loadedResultsCallback(botColors: string[]) {
+    config.colors = botColors
+}
+
 // navbar callback functions
 function setupButtonCallback() {
     mode.value = Modes.SETUPSCREEN
@@ -69,7 +74,7 @@ function champButtonCallback() {
   <main>
     <carddisplay v-if="mode === Modes.CARDDISPLAY" :config="config" @back-to-setup="newSetup"/>
     <setupscreen v-else-if="mode === Modes.SETUPSCREEN" :config="config" @submit="newGame" />
-    <championshipresults v-else-if="mode === Modes.CHAMPIONSHIPRESULTS" :config="config" :results="champResults" @exit="backToGame"/>
+    <championshipresults v-else-if="mode === Modes.CHAMPIONSHIPRESULTS" :config="config" :results="champResults" @exit="backToGame" @loaded="loadedResultsCallback"/>
   </main>
 </template>
 
