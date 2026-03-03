@@ -1,4 +1,4 @@
-export const AllColors = new Set(["black", "blue", "green", "grey", "red", "yellow", "orange", "purple",])
+export const AllColors = new Set(["black", "blue", "green", "grey", "red", "yellow", "orange", "purple","white"])
 export const StdColors = new Set(["black", "blue", "green", "grey", "red", "yellow"])
 export const AllTracks = new Set(["Great Britain", "France", "Italia", "USA", "Japan", "Mexico", "Netherlands", "Spain", "Germany", "South Africa"])
 
